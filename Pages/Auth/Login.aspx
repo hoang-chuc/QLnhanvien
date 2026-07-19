@@ -5,7 +5,7 @@
 <head runat="server">
     <title>Hệ thống Quản lý Nhân viên</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../Assets/CSS/style.css" rel="stylesheet" />
+    <link href="../../../Assets/CSS/style.css" rel="stylesheet" />
 </head>
 <body class="login-body">
     <form id="form1" runat="server">
