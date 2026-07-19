@@ -1,0 +1,103 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="QLNhanVien.SiteMaster" %>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server"></asp:ContentPlaceHolder> - QL Nhân Sự</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <link href="<%= ResolveUrl("~/Assets/CSS/style.css") %>" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="wrapper">
+            
+            <aside class="sidebar">
+                <div class="sidebar-brand">
+                    <span>IPlus</span>
+                </div>
+                
+                <div class="sidebar-user">
+                    <img src="https://ui-avatars.com/api/?name=<%= Session["Username"] %>&background=random&color=fff" alt="User Image" />
+                    <div class="info">
+                        <p><asp:Label ID="lblUserName" runat="server" Text='<%# Session["Username"] %>'></asp:Label></p>
+                        <small>
+                            <i class="fas fa-circle text-success"></i> 
+                            <% 
+                                if (Session["Role"] != null && Session["Role"].ToString() == "QuanLy") {
+                                    Response.Write("Quản lý nhân viên phòng " + Session["TenPBQuanLy"]);
+                                } else {
+                                    Response.Write(Session["Role"] ?? "Chưa đăng nhập");
+                                }
+                            %>
+                        </small>
+                    </div>
+                </div>
+
+                <div class="sidebar-search">
+                    <input type="text" placeholder="Tìm kiếm..." />
+                </div>
+
+                <ul class="sidebar-menu">
+                    <li class="header">ĐIỀU HƯỚNG CHÍNH</li>
+                    
+                    <li class="active">
+                        <a href="<%= ResolveUrl("~/Pages/Common/Default.aspx") %>">
+                            <i class="fas fa-tachometer-alt"></i> <span>Tổng quan</span>
+                        </a>
+                    </li>
+
+                    <% string role = Session["Role"] != null ? Session["Role"].ToString() : ""; %>
+
+                    <% if (role == "Admin" || role == "QuanLy") { %>
+                        <li><a href="<%= ResolveUrl("~/Pages/Admin/ThongKe.aspx") %>"><i class="fas fa-chart-pie"></i> <span>Thống kê</span></a></li>
+                        <li><a href="<%= ResolveUrl("~/Pages/Admin/DanhSachNhanVien.aspx") %>"><i class="fas fa-users"></i> <span>Quản lý nhân viên</span></a></li>
+                        <li><a href="<%= ResolveUrl("~/Pages/Admin/QuanLyLuong.aspx") %>"><i class="fas fa-money-bill-wave"></i> <span>Quản lý lương</span></a></li>
+                        <li><a href="<%= ResolveUrl("~/Pages/Admin/QuanLyCongTac.aspx") %>"><i class="fas fa-briefcase"></i> <span>Nghỉ phép</span></a></li>
+                    <% } %>
+
+                    <% if (role == "NhanVien") { %>
+                        <li><a href="<%= ResolveUrl("~/Pages/NhanVien/HoSoCaNhan.aspx") %>"><i class="fas fa-id-card"></i> <span>Thông tin cá nhân</span></a></li>
+                        <li><a href="<%= ResolveUrl("~/Pages/NhanVien/BangLuongCaNhan.aspx") %>"><i class="fas fa-wallet"></i> <span>Bảng lương của tôi</span></a></li>
+                        <li><a href="#"><i class="fas fa-tasks"></i> <span>Công tác phí</span></a></li>
+                    <% } %>
+
+                    <% if (role == "Admin") { %>
+                        <li class="header">HỆ THỐNG</li>
+                        <li><a href="<%= ResolveUrl("~/Pages/Admin/DanhSachPhongBan.aspx") %>"><i class="fas fa-university"></i> <span>Phòng ban & Chức vụ</span></a></li>
+                        <li><a href="<%= ResolveUrl("~/Pages/Admin/DanhSachTaiKhoan.aspx") %>"><i class="fas fa-user-shield"></i> <span>Tài khoản hệ thống</span></a></li>
+                    <% } %>
+                </ul>
+            </aside>
+
+            <div class="main-content">
+                <header class="top-navbar">
+                    <div class="nav-left-toggle">
+                        <a href="#" class="text-white text-decoration-none fs-4"><i class="fas fa-bars"></i></a>
+                    </div>
+                    <div class="nav-right d-flex align-items-center">
+                        <a href="<%= ResolveUrl("~/Pages/Common/HopThuNghiPhep.aspx") %>" class="position-relative me-3 text-white" title="Hộp thư xin nghỉ">
+                            <i class="far fa-envelope"></i>
+                        </a>
+                        <a href="#" class="position-relative me-3 text-white"><i class="far fa-bell"></i></a>
+                        <div class="user-dropdown d-flex align-items-center">
+                            <asp:LinkButton ID="btnLogout" runat="server" OnClick="btnLogout_Click" CssClass="text-white text-decoration-none ms-3">
+                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                            </asp:LinkButton>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="p-3">
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

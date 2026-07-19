@@ -1,0 +1,9 @@
+﻿bin/
+obj/
+packages/
+.vs/
+*.user
+*.suo
+Tester/node_modules/
+Tester/playwright-report/
+Tester/test-results/

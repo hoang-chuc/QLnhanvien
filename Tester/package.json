@@ -1,0 +1,20 @@
+{
+  "name": "qlnhanvien-tester",
+  "version": "1.0.0",
+  "description": "Playwright E2E tests for QLNhanVien system",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:chrome": "npx playwright test --project=chromium",
+    "test:debug": "npx playwright test --debug"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@playwright/test": "^1.60.0",
+    "playwright": "^1.60.0"
+  }
+}
