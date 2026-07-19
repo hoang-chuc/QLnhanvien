@@ -16,7 +16,8 @@ namespace QLNhanVien
             {
                 if (Session["Username"] != null)
                 {
-                    Response.Redirect("~/Pages/Common/Default.aspx");
+                    // Dùng JS redirect để bypass IIS URL Rewrite intercept Location header
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "redirect", "window.location.href='/Pages/Common/Default.aspx';", true);
                 }
             }
         }
@@ -120,7 +121,8 @@ namespace QLNhanVien
                             Session["TenPBQuanLy"] = tenPBQuanLy;
                         }
 
-                        Response.Redirect("~/Pages/Common/Default.aspx");
+                        // Dùng JS redirect để bypass IIS URL Rewrite intercept Location header
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "redirect", "window.location.href='/Pages/Common/Default.aspx';", true);
                     }
                     else
                     {
