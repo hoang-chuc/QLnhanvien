@@ -1,21 +1,21 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = 'https://localhost:44335';
+const BASE_URL = 'http://localhost:8080';
 
 test.describe('TEST 10: HO SO CA NHAN (Nhan vien)', () => {
 
     test.beforeEach(async ({ page }) => {
         await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
-        await page.locator('#txtLoginUsername').fill('testuser');
-        await page.locator('#txtLoginPassword').fill('test123');
+        await page.locator('#txtLoginUsername').fill('nvvan');
+        await page.locator('#txtLoginPassword').fill('nvvan');
         await page.locator('#btnLogin').click();
         await page.waitForTimeout(1000);
         await page.goto(`${BASE_URL}/Pages/NhanVien/HoSoCaNhan.aspx`);
     });
 
     test('TC01: Hien thi trang ho so ca nhan', async ({ page }) => {
-        await expect(page.locator('text=Thông tin tài khoản')).toBeVisible();
-        await expect(page.locator('text=Thông tin chi tiết')).toBeVisible();
+        await expect(page.locator('text=Thông tin tài khoản').first()).toBeVisible();
+        await expect(page.locator('text=Thông tin chi tiết').first()).toBeVisible();
     });
 
     test('TC02: Hien thi anh dai dien', async ({ page }) => {
@@ -61,7 +61,7 @@ test.describe('TEST 10: HO SO CA NHAN (Nhan vien)', () => {
     });
 
     test('TC10: Hien thi nut doi anh', async ({ page }) => {
-        await expect(page.locator('text=Đổi ảnh đại diện')).toBeVisible();
+        await expect(page.locator('text=Đổi ảnh đại diện').first()).toBeVisible();
     });
 
     test('TC11: Chuc vu hien thi o ca 2 cho (title va detail)', async ({ page }) => {

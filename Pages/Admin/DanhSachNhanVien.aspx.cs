@@ -193,7 +193,7 @@ namespace QLNhanVien
                         txtLuong.Text = Convert.ToInt32(dr["LuongCoBan"]).ToString();
                         ddlTrangThai.SelectedValue = dr["TrangThai"].ToString();
 
-                        lblFormTitle.Text = "Cập nhật thông vị nhân viên (Mã: MNV" + maNV + ")";
+                        lblFormTitle.Text = "Cập nhật thông tin nhân viên (Mã: MNV" + maNV + ")";
                         mvNhanVien.ActiveViewIndex = 1;
                     }
                 }
@@ -228,14 +228,20 @@ namespace QLNhanVien
                             AddParameters(cmd, ngaySinh, pb, cv, luong);
                             int newMaNV = Convert.ToInt32(cmd.ExecuteScalar());
 
+                            // BẢO MẬT: Hash mật khẩu bằng SHA256 trước khi lưu
+                            string hashedPassword = PasswordHelper.HashPassword("123456");
                             SqlCommand cmdTK = new SqlCommand(@"INSERT INTO TaiKhoan (Username, PasswordHash, MaNV, Role, TrangThai) 
-                                                                VALUES (@User, '123456', @MaNV, 'NhanVien', 1)", conn, trans);
+                                                                VALUES (@User, @Password, @MaNV, 'NhanVien', 1)", conn, trans);
+                            cmdTK.Parameters.AddWithValue("@Password", hashedPassword);
                             cmdTK.Parameters.AddWithValue("@User", string.IsNullOrEmpty(txtSDT.Text) ? "NV" + newMaNV : txtSDT.Text);
                             cmdTK.Parameters.AddWithValue("@MaNV", newMaNV);
                             cmdTK.ExecuteNonQuery();
 
+                            // INSERT lương mới - tính TongLuong theo HeSoLuong (nhất quán với btnTaoBangLuong)
                             SqlCommand cmdLuong = new SqlCommand(@"INSERT INTO Luong (MaNV, Thang, Nam, LuongCoBan, Thuong, Phat, TongLuong, DaThanhToan) 
-                                                                   VALUES (@MaNV, @Thang, @Nam, @LuongCoBan, 0, 0, @LuongCoBan, 0)", conn, trans);
+                                                                   SELECT @MaNV, @Thang, @Nam, @LuongCoBan, 0, 0, (@LuongCoBan * ISNULL(c.HeSoLuong, 1)), 0 
+                                                                   FROM NhanVien nv LEFT JOIN ChucVu c ON nv.MaCV = c.MaCV 
+                                                                   WHERE nv.MaNV = @MaNV", conn, trans);
                             cmdLuong.Parameters.AddWithValue("@MaNV", newMaNV);
                             cmdLuong.Parameters.AddWithValue("@Thang", DateTime.Now.Month);
                             cmdLuong.Parameters.AddWithValue("@Nam", DateTime.Now.Year);
@@ -259,8 +265,14 @@ namespace QLNhanVien
                             cmdTK.ExecuteNonQuery();
 
                             // Cập nhật lại Lương Cơ Bản trong bảng Lương tháng hiện tại nếu có thay đổi
-                            SqlCommand cmdUpdLuong = new SqlCommand(@"UPDATE Luong SET LuongCoBan = @LuongCoBan, TongLuong = @LuongCoBan + Thuong - Phat 
-                                                                      WHERE MaNV = @MaNV AND Thang = @Thang AND Nam = @Nam", conn, trans);
+                            // FIX: Tính TongLuong = (LuongCoBan × HeSoLuong) + Thuong - Phat (nhất quán với btnTaoBangLuong)
+                            SqlCommand cmdUpdLuong = new SqlCommand(@"UPDATE l 
+                                                                      SET l.LuongCoBan = @LuongCoBan, 
+                                                                          l.TongLuong = (@LuongCoBan * ISNULL(c.HeSoLuong, 1)) + l.Thuong - l.Phat 
+                                                                      FROM Luong l
+                                                                      INNER JOIN NhanVien n ON l.MaNV = n.MaNV
+                                                                      LEFT JOIN ChucVu c ON n.MaCV = c.MaCV
+                                                                      WHERE l.MaNV = @MaNV AND l.Thang = @Thang AND l.Nam = @Nam", conn, trans);
                             cmdUpdLuong.Parameters.AddWithValue("@LuongCoBan", luong);
                             cmdUpdLuong.Parameters.AddWithValue("@MaNV", hdfMaNV.Value);
                             cmdUpdLuong.Parameters.AddWithValue("@Thang", DateTime.Now.Month);

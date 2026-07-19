@@ -60,7 +60,9 @@ namespace QLNhanVien
 
                 while (drPB.Read())
                 {
-                    strLblPB += "'" + drPB["TenPhongBan"].ToString() + "',";
+                    // BẢO MẬT: Escape ký tự đặc biệt trong tên để tránh XSS
+                    string tenPB = drPB["TenPhongBan"].ToString().Replace("\\", "\\\\").Replace("'", "\\'").Replace("\"", "\\\"");
+                    strLblPB += "'" + tenPB + "',";
                     strDataNV += drPB["SoLaoDong"].ToString() + ",";
                     strDataLuong += drPB["TongQuyLuong"].ToString() + ",";
                 }
@@ -68,6 +70,7 @@ namespace QLNhanVien
 
                 if (strLblPB.Length > 0)
                 {
+
                     LabelsPhongBan = "[" + strLblPB.TrimEnd(',') + "]";
                     DataNhanVien = "[" + strDataNV.TrimEnd(',') + "]";
                     DataQuyLuong = "[" + strDataLuong.TrimEnd(',') + "]";
@@ -86,7 +89,9 @@ namespace QLNhanVien
 
                 while (drNP.Read())
                 {
-                    strLblNP += "'" + drNP["TrangThai"].ToString() + "',";
+                    // BẢO MẬT: Escape ký tự đặc biệt
+                    string trangThai = drNP["TrangThai"].ToString().Replace("\\", "\\\\").Replace("'", "\\'");
+                    strLblNP += "'" + trangThai + "',";
                     strDataNP += drNP["SoLuong"].ToString() + ",";
                 }
                 drNP.Close();

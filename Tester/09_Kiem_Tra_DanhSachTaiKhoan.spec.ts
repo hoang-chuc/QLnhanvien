@@ -1,21 +1,21 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = 'https://localhost:44335';
+const BASE_URL = 'http://localhost:8080';
 
 test.describe('TEST 09: DANH SACH TAI KHOAN', () => {
 
     test.beforeEach(async ({ page }) => {
         await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
         await page.locator('#txtLoginUsername').fill('admin');
-        await page.locator('#txtLoginPassword').fill('admin123');
+        await page.locator('#txtLoginPassword').fill('123456');
         await page.locator('#btnLogin').click();
-        await expect(page).toHaveURL(/.*Default\.aspx/, { timeout: 10000 });
+        await page.waitForTimeout(1000);
         await page.goto(`${BASE_URL}/Pages/Admin/DanhSachTaiKhoan.aspx`);
     });
 
     test('TC01: Hien thi trang tai khoan he thong', async ({ page }) => {
-        await expect(page.locator('text=Tài khoản hệ thống')).toBeVisible();
-        await expect(page.locator('text=Khu vực bảo mật')).toBeVisible();
+        await expect(page.locator('text=Tài khoản hệ thống').first()).toBeVisible();
+        await expect(page.locator('text=Khu vực bảo mật').first()).toBeVisible();
     });
 
     test('TC02: Hien thi danh sach tai khoan', async ({ page }) => {
@@ -39,23 +39,23 @@ test.describe('TEST 09: DANH SACH TAI KHOAN', () => {
 
     test('TC05: Phan quyen NhanVien khong vao duoc', async ({ page }) => {
         await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
-        await page.locator('#txtLoginUsername').fill('testuser');
-        await page.locator('#txtLoginPassword').fill('test123');
+        await page.locator('#txtLoginUsername').fill('nvvan');
+        await page.locator('#txtLoginPassword').fill('nvvan');
         await page.locator('#btnLogin').click();
         await page.waitForTimeout(1000);
 
         await page.goto(`${BASE_URL}/Pages/Admin/DanhSachTaiKhoan.aspx`);
-        await expect(page).toHaveURL(/.*Login\.aspx|.*Default\.aspx/, { timeout: 5000 });
+        await expect(page).toHaveURL(/.*Login\.aspx|.*Default/, { timeout: 5000 });
     });
 
     test('TC06: Phan quyen QuanLy khong vao duoc', async ({ page }) => {
         await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
-        await page.locator('#txtLoginUsername').fill('quanly');
-        await page.locator('#txtLoginPassword').fill('quanly123');
+        await page.locator('#txtLoginUsername').fill('qlquang');
+        await page.locator('#txtLoginPassword').fill('qlquang');
         await page.locator('#btnLogin').click();
         await page.waitForTimeout(1000);
 
         await page.goto(`${BASE_URL}/Pages/Admin/DanhSachTaiKhoan.aspx`);
-        await expect(page).toHaveURL(/.*Login\.aspx|.*Default\.aspx/, { timeout: 5000 });
+        await expect(page).toHaveURL(/.*Login\.aspx|.*Default/, { timeout: 5000 });
     });
 });

@@ -40,7 +40,7 @@ namespace QLNhanVien
 
                 if (Session["Role"].ToString() == "QuanLy")
                 {
-                    sql += " AND n.MaPB = (SELECT MaPB_QuanLy FROM TaiKhoan WHERE Username = @User) ";
+                    sql += " AND n.MaPB = @MaPB_QuanLy ";
                 }
 
                 if (ddlFilterTrangThai.SelectedValue != "Tất cả")
@@ -53,7 +53,7 @@ namespace QLNhanVien
                 SqlCommand cmd = new SqlCommand(sql, conn);
 
                 if (Session["Role"].ToString() == "QuanLy")
-                    cmd.Parameters.AddWithValue("@User", Session["Username"].ToString());
+                    cmd.Parameters.AddWithValue("@MaPB_QuanLy", Session["MaPB_QuanLy"]);
 
                 if (ddlFilterTrangThai.SelectedValue != "Tất cả")
                     cmd.Parameters.AddWithValue("@TrangThai", ddlFilterTrangThai.SelectedValue);

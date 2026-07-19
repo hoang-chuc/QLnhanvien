@@ -67,7 +67,7 @@
             </div>
             <div class="card-footer bg-white text-muted small">
                 <i class="fas fa-info-circle me-1"></i> Ghi chú: Tổng lương thực lĩnh được tính theo công thức: 
-                $TongLuong = LuongCoBan + Thuong - Phat$
+                <strong>Tổng lương = (Lương cơ bản × Hệ số chức vụ) + Thưởng - Phạt</strong>
             </div>
         </div>
     </div>

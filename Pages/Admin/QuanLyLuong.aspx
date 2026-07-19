@@ -10,7 +10,7 @@
             <div class="row align-items-end g-3">
                 <div class="col-md-2">
                     <label class="form-label fw-bold">Tháng:</label>
-                    <asp:DropDownList ID="ddlThang" runat="server" CssClass="form-control">
+                    <asp:DropDownList ID="ddlThang" runat="server" CssClass="form-select">
                         <asp:ListItem Value="1">Tháng 1</asp:ListItem>
                         <asp:ListItem Value="2">Tháng 2</asp:ListItem>
                         <asp:ListItem Value="3">Tháng 3</asp:ListItem>

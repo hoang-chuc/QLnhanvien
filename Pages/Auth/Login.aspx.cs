@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Web.UI;
 
 namespace QLNhanVien
 {
@@ -57,47 +58,73 @@ namespace QLNhanVien
             using (SqlConnection conn = new SqlConnection(strConn))
             {
                 // JOIN thêm bảng NhanVien để lấy MaPB và bảng PhongBan để lấy tên phòng mà Quản lý phụ trách
-                string sql = @"SELECT t.MaTK, t.MaNV, t.Role, t.TrangThai, t.MaPB_QuanLy, n.MaPB, p.TenPhongBan 
+                // Bỏ PasswordHash khỏi WHERE - chỉ tìm theo Username, verify hash sau
+                string sql = @"SELECT t.MaTK, t.MaNV, t.Role, t.TrangThai, t.PasswordHash, t.MaPB_QuanLy, n.MaPB, p.TenPhongBan 
                                FROM TaiKhoan t
                                LEFT JOIN NhanVien n ON t.MaNV = n.MaNV
                                LEFT JOIN PhongBan p ON t.MaPB_QuanLy = p.MaPB
-                               WHERE t.Username = @Username AND t.PasswordHash = @Password";
+                               WHERE t.Username = @Username";
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@Username", txtLoginUsername.Text.Trim());
-                    cmd.Parameters.AddWithValue("@Password", txtLoginPassword.Text.Trim());
 
                     conn.Open();
+                    // Đọc hết thông tin trước (bao gồm PasswordHash)
+                    string storedPassword = "";
+                    string role = "";
+                    bool trangThai = true;
+                    string maNV = "", maPB = "", maPB_QuanLy = "", tenPBQuanLy = "";
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            if (!Convert.ToBoolean(reader["TrangThai"]))
+                            storedPassword = reader["PasswordHash"].ToString();
+                            trangThai = Convert.ToBoolean(reader["TrangThai"]);
+                            role = reader["Role"].ToString();
+                            maNV = reader["MaNV"] != DBNull.Value ? reader["MaNV"].ToString() : "";
+                            maPB = reader["MaPB"] != DBNull.Value ? reader["MaPB"].ToString() : "";
+                            if (role == "QuanLy")
                             {
-                                ShowMessage("Tài khoản đã bị khóa!", false);
-                                return;
+                                maPB_QuanLy = reader["MaPB_QuanLy"].ToString();
+                                tenPBQuanLy = reader["TenPhongBan"] != DBNull.Value ? reader["TenPhongBan"].ToString() : "Chưa xác định";
                             }
-
-                            // 1. Lưu thông tin cơ bản
-                            Session["Username"] = txtLoginUsername.Text.Trim();
-                            Session["Role"] = reader["Role"].ToString();
-                            Session["MaNV"] = reader["MaNV"] != DBNull.Value ? reader["MaNV"].ToString() : "";
-                            Session["MaPB"] = reader["MaPB"] != DBNull.Value ? reader["MaPB"].ToString() : "";
-
-                            // 2. Xử lý riêng thông tin cho Quản lý
-                            if (reader["Role"].ToString() == "QuanLy")
-                            {
-                                Session["MaPB_QuanLy"] = reader["MaPB_QuanLy"].ToString();
-                                Session["TenPBQuanLy"] = reader["TenPhongBan"] != DBNull.Value ? reader["TenPhongBan"].ToString() : "Chưa xác định";
-                            }
-
-                            Response.Redirect("~/Pages/Common/Default.aspx");
                         }
-                        else
+                    }
+
+                    if (!string.IsNullOrEmpty(storedPassword))
+                    {
+                        // BẢO MẬT: Xác thực mật khẩu qua SHA256 hash (hỗ trợ cả plain text cũ)
+                        if (!PasswordHelper.VerifyPassword(txtLoginPassword.Text.Trim(), storedPassword))
                         {
                             ShowMessage("Sai tên đăng nhập hoặc mật khẩu!", false);
+                            return;
                         }
+
+                        if (!trangThai)
+                        {
+                            ShowMessage("Tài khoản đã bị khóa!", false);
+                            return;
+                        }
+
+                        // Lưu thông tin vào Session
+                        Session["Username"] = txtLoginUsername.Text.Trim();
+                        Session["Role"] = role;
+                        Session["MaNV"] = maNV;
+                        Session["MaPB"] = maPB;
+
+                        if (role == "QuanLy")
+                        {
+                            Session["MaPB_QuanLy"] = maPB_QuanLy;
+                            Session["TenPBQuanLy"] = tenPBQuanLy;
+                        }
+
+                        Response.Redirect("~/Pages/Common/Default.aspx");
+                    }
+                    else
+                    {
+                        ShowMessage("Sai tên đăng nhập hoặc mật khẩu!", false);
                     }
                 }
             }
@@ -129,11 +156,13 @@ namespace QLNhanVien
                     newMaNV = Convert.ToInt32(cmdNV.ExecuteScalar());
                 }
 
+                // BẢO MẬT: Hash mật khẩu bằng SHA256 trước khi lưu
+                string hashedPassword = PasswordHelper.HashPassword(txtRegPassword.Text.Trim());
                 string insertTKSql = "INSERT INTO TaiKhoan (Username, PasswordHash, MaNV, Role, TrangThai) VALUES (@Username, @Password, @MaNV, 'NhanVien', 1)";
                 using (SqlCommand cmdTK = new SqlCommand(insertTKSql, conn))
                 {
                     cmdTK.Parameters.AddWithValue("@Username", txtRegUsername.Text.Trim());
-                    cmdTK.Parameters.AddWithValue("@Password", txtRegPassword.Text.Trim());
+                    cmdTK.Parameters.AddWithValue("@Password", hashedPassword);
                     cmdTK.Parameters.AddWithValue("@MaNV", newMaNV);
                     cmdTK.ExecuteNonQuery();
                 }
@@ -156,12 +185,14 @@ namespace QLNhanVien
                                  AND n.CCCD = @CCCD 
                                  AND n.SDT = @SDT";
 
+                // BẢO MẬT: Hash mật khẩu mới trước khi lưu
+                string hashedNewPassword = PasswordHelper.HashPassword(txtNewPassword.Text.Trim());
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@Username", txtForgotUsername.Text.Trim());
                     cmd.Parameters.AddWithValue("@CCCD", txtForgotCCCD.Text.Trim());
                     cmd.Parameters.AddWithValue("@SDT", txtForgotSDT.Text.Trim());
-                    cmd.Parameters.AddWithValue("@NewPassword", txtNewPassword.Text.Trim());
+                    cmd.Parameters.AddWithValue("@NewPassword", hashedNewPassword);
 
                     conn.Open();
                     int rowsAffected = cmd.ExecuteNonQuery();

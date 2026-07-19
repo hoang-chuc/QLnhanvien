@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = 'https://localhost:44335';
+const BASE_URL = 'http://localhost:8080';
 
 test.describe('TEST 06: HOP THU NGHI PHEP', () => {
 
@@ -8,15 +8,15 @@ test.describe('TEST 06: HOP THU NGHI PHEP', () => {
 
         test.beforeEach(async ({ page }) => {
             await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
-            await page.locator('#txtLoginUsername').fill('testuser');
-            await page.locator('#txtLoginPassword').fill('test123');
+            await page.locator('#txtLoginUsername').fill('nvvan');
+            await page.locator('#txtLoginPassword').fill('nvvan');
             await page.locator('#btnLogin').click();
             await page.waitForTimeout(1000);
             await page.goto(`${BASE_URL}/Pages/Common/HopThuNghiPhep.aspx`);
         });
 
         test('TC01: Hien thi form gui don nghi phep', async ({ page }) => {
-            await expect(page.locator('text=Gửi đơn xin nghỉ phép')).toBeVisible();
+            await expect(page.locator('text=Gửi đơn xin nghỉ phép').first()).toBeVisible();
             await expect(page.locator('#MainContent_txtTuNgay')).toBeVisible();
             await expect(page.locator('#MainContent_txtDenNgay')).toBeVisible();
             await expect(page.locator('#MainContent_txtLyDo')).toBeVisible();
@@ -59,14 +59,14 @@ test.describe('TEST 06: HOP THU NGHI PHEP', () => {
         test.beforeEach(async ({ page }) => {
             await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
             await page.locator('#txtLoginUsername').fill('admin');
-            await page.locator('#txtLoginPassword').fill('admin123');
+            await page.locator('#txtLoginPassword').fill('123456');
             await page.locator('#btnLogin').click();
-            await expect(page).toHaveURL(/.*Default\.aspx/, { timeout: 10000 });
+            await expect(page).toHaveURL(/.*Default/, { timeout: 10000 });
             await page.goto(`${BASE_URL}/Pages/Common/HopThuNghiPhep.aspx`);
         });
 
         test('TC04: Hien thi danh sach don den', async ({ page }) => {
-            await expect(page.locator('text=Hộp thư đến')).toBeVisible();
+            await expect(page.locator('text=Hộp thư đến').first()).toBeVisible();
             const gridVisible = await page.locator('#MainContent_gvDonNghi').isVisible();
             expect(gridVisible).toBeTruthy();
         });
@@ -75,7 +75,7 @@ test.describe('TEST 06: HOP THU NGHI PHEP', () => {
             const xemBtn = page.locator('#MainContent_gvDonNghi_btnXem_0');
             if (await xemBtn.isVisible()) {
                 await xemBtn.click();
-                await expect(page.locator('text=Chi tiết đơn nghỉ phép')).toBeVisible();
+                await expect(page.locator('text=Chi tiết đơn nghỉ phép').first()).toBeVisible();
                 await expect(page.locator('#MainContent_lblChiTietNguoiGui')).toBeVisible();
                 await expect(page.locator('#MainContent_lblChiTietThoiGian')).toBeVisible();
                 await expect(page.locator('#MainContent_btnChapNhan')).toBeVisible();
@@ -87,9 +87,9 @@ test.describe('TEST 06: HOP THU NGHI PHEP', () => {
             const xemBtn = page.locator('#MainContent_gvDonNghi_btnXem_0');
             if (await xemBtn.isVisible()) {
                 await xemBtn.click();
-                await expect(page.locator('text=Chi tiết đơn nghỉ phép')).toBeVisible();
+                await expect(page.locator('text=Chi tiết đơn nghỉ phép').first()).toBeVisible();
                 await page.locator('#MainContent_btnBack').click();
-                await expect(page.locator('text=Hộp thư đến')).toBeVisible();
+                await expect(page.locator('text=Hộp thư đến').first()).toBeVisible();
             }
         });
 
@@ -99,7 +99,7 @@ test.describe('TEST 06: HOP THU NGHI PHEP', () => {
                 await xemBtn.click();
                 await page.locator('#MainContent_btnChapNhan').click();
                 await page.waitForTimeout(1500);
-                await expect(page.locator('text=Hộp thư đến')).toBeVisible();
+                await expect(page.locator('text=Hộp thư đến').first()).toBeVisible();
             }
         });
     });

@@ -32,21 +32,50 @@ namespace QLNhanVien
             {
                 conn.Open();
 
-                // 1. Đếm nhân viên đang làm
+                // 1. Đếm nhân viên đang làm (Parameterized query - tránh SQL Injection)
                 string sqlNV = "SELECT COUNT(*) FROM NhanVien WHERE TrangThai = N'Đang làm'";
-                if (Session["Role"].ToString() == "QuanLy") sqlNV += " AND MaPB = '" + Session["MaPB_QuanLy"] + "'";
-                lblTongNhanVien.Text = new SqlCommand(sqlNV, conn).ExecuteScalar().ToString();
+                SqlCommand cmdNV = new SqlCommand(sqlNV, conn);
+                if (Session["Role"].ToString() == "QuanLy")
+                {
+                    sqlNV += " AND MaPB = @MaPB_QuanLy";
+                    cmdNV.CommandText = sqlNV;
+                    cmdNV.Parameters.AddWithValue("@MaPB_QuanLy", Session["MaPB_QuanLy"]);
+                }
+                lblTongNhanVien.Text = cmdNV.ExecuteScalar().ToString();
 
-                // 2. Đếm phòng ban
-                lblTongPhongBan.Text = new SqlCommand("SELECT COUNT(*) FROM PhongBan", conn).ExecuteScalar().ToString();
+                // 2. Đếm phòng ban (Phân quyền: QuanLy chỉ thấy phòng ban mình quản lý)
+                if (Session["Role"].ToString() == "QuanLy")
+                {
+                    lblTongPhongBan.Text = "1"; // Quản lý chỉ phụ trách 1 phòng ban
+                }
+                else
+                {
+                    lblTongPhongBan.Text = new SqlCommand("SELECT COUNT(*) FROM PhongBan", conn).ExecuteScalar().ToString();
+                }
 
-                // 3. Đếm tài khoản
-                lblTongTaiKhoan.Text = new SqlCommand("SELECT COUNT(*) FROM TaiKhoan", conn).ExecuteScalar().ToString();
+                // 3. Đếm tài khoản (Phân quyền: QuanLy chỉ thấy tài khoản phòng mình)
+                if (Session["Role"].ToString() == "QuanLy")
+                {
+                    string sqlTK = @"SELECT COUNT(*) FROM TaiKhoan t INNER JOIN NhanVien n ON t.MaNV = n.MaNV WHERE n.MaPB = @MaPB_QuanLy";
+                    SqlCommand cmdTK = new SqlCommand(sqlTK, conn);
+                    cmdTK.Parameters.AddWithValue("@MaPB_QuanLy", Session["MaPB_QuanLy"]);
+                    lblTongTaiKhoan.Text = cmdTK.ExecuteScalar().ToString();
+                }
+                else
+                {
+                    lblTongTaiKhoan.Text = new SqlCommand("SELECT COUNT(*) FROM TaiKhoan", conn).ExecuteScalar().ToString();
+                }
 
-                // 4. Đếm nhân viên nghỉ việc
+                // 4. Đếm nhân viên nghỉ việc (Parameterized query - tránh SQL Injection)
                 string sqlNghi = "SELECT COUNT(*) FROM NhanVien WHERE TrangThai = N'Đã nghỉ việc'";
-                if (Session["Role"].ToString() == "QuanLy") sqlNghi += " AND MaPB = '" + Session["MaPB_QuanLy"] + "'";
-                lblNVNghiViec.Text = new SqlCommand(sqlNghi, conn).ExecuteScalar().ToString();
+                SqlCommand cmdNghi = new SqlCommand(sqlNghi, conn);
+                if (Session["Role"].ToString() == "QuanLy")
+                {
+                    sqlNghi += " AND MaPB = @MaPB_QuanLy";
+                    cmdNghi.CommandText = sqlNghi;
+                    cmdNghi.Parameters.AddWithValue("@MaPB_QuanLy", Session["MaPB_QuanLy"]);
+                }
+                lblNVNghiViec.Text = cmdNghi.ExecuteScalar().ToString();
             }
         }
 

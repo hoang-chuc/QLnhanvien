@@ -82,8 +82,9 @@ namespace QLNhanVien
                 }
                 catch (Exception ex)
                 {
-                    // Log lỗi nếu cần thiết
-                    Response.Write("<script>alert('Lỗi tải dữ liệu: " + ex.Message + "');</script>");
+                    // BẢO MẬT: Escape message để tránh XSS
+                    string safeMsg = ex.Message.Replace("'", "\\'").Replace("</script>", "");
+                    Response.Write("<script>alert('Lỗi tải dữ liệu: " + safeMsg + "');</script>");
                 }
             }
         }

@@ -49,7 +49,9 @@ namespace QLNhanVien
                 }
                 catch (Exception ex)
                 {
-                    Response.Write("<script>alert('Có lỗi xảy ra khi tải bảng lương: " + ex.Message + "');</script>");
+                    // BẢO MẬT: Escape message để tránh XSS
+                    string safeMsg = ex.Message.Replace("'", "\\'").Replace("</script>", "");
+                    Response.Write("<script>alert('Có lỗi xảy ra khi tải bảng lương: " + safeMsg + "');</script>");
                 }
             }
         }

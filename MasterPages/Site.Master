@@ -23,7 +23,7 @@
                 <div class="sidebar-user">
                     <img src="https://ui-avatars.com/api/?name=<%= Session["Username"] %>&background=random&color=fff" alt="User Image" />
                     <div class="info">
-                        <p><asp:Label ID="lblUserName" runat="server" Text='<%# Session["Username"] %>'></asp:Label></p>
+                        <p>                        <asp:Label ID="lblUserName" runat="server"></asp:Label></p>
                         <small>
                             <i class="fas fa-circle text-success"></i> 
                             <% 
@@ -52,7 +52,7 @@
 
                     <% string role = Session["Role"] != null ? Session["Role"].ToString() : ""; %>
 
-                    <% if (role == "Admin" || role == "QuanLy") { %>
+                    <% if (role == "Admin") { %>
                         <li><a href="<%= ResolveUrl("~/Pages/Admin/ThongKe.aspx") %>"><i class="fas fa-chart-pie"></i> <span>Thống kê</span></a></li>
                         <li><a href="<%= ResolveUrl("~/Pages/Admin/DanhSachNhanVien.aspx") %>"><i class="fas fa-users"></i> <span>Quản lý nhân viên</span></a></li>
                         <li><a href="<%= ResolveUrl("~/Pages/Admin/QuanLyLuong.aspx") %>"><i class="fas fa-money-bill-wave"></i> <span>Quản lý lương</span></a></li>
@@ -62,7 +62,7 @@
                     <% if (role == "NhanVien") { %>
                         <li><a href="<%= ResolveUrl("~/Pages/NhanVien/HoSoCaNhan.aspx") %>"><i class="fas fa-id-card"></i> <span>Thông tin cá nhân</span></a></li>
                         <li><a href="<%= ResolveUrl("~/Pages/NhanVien/BangLuongCaNhan.aspx") %>"><i class="fas fa-wallet"></i> <span>Bảng lương của tôi</span></a></li>
-                        <li><a href="#"><i class="fas fa-tasks"></i> <span>Công tác phí</span></a></li>
+                        <%-- Menu placeholder - chưa implement --%>
                     <% } %>
 
                     <% if (role == "Admin") { %>

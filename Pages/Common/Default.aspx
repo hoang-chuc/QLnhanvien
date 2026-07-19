@@ -20,25 +20,25 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-dark bg-warning h-100 border-0 shadow-sm">
+            <div class="card text-white h-100 border-0 shadow-sm" style="background-color: #6c757d !important;">
                 <div class="card-body">
                     <h2 class="fw-bold"><asp:Label ID="lblTongPhongBan" runat="server" Text="0"></asp:Label></h2>
                     <p class="mb-0 fs-5">Phòng ban</p>
                     <i class="fas fa-university position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
                 </div>
-                <div class="card-footer bg-warning border-0 text-center">
-                    <a href="../Admin/DanhSachPhongBan.aspx" class="text-dark text-decoration-none small">Danh sách phòng ban <i class="fas fa-arrow-circle-right"></i></a>
+                <div class="card-footer border-0 text-center" style="background-color: #5a6268;">
+                    <a href="../Admin/DanhSachPhongBan.aspx" class="text-white text-decoration-none small">Danh sách phòng ban <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-warning h-100 border-0 shadow-sm" style="background-color: #f39c12 !important;">
+            <div class="card text-white h-100 border-0 shadow-sm" style="background-color: #8e44ad !important;">
                 <div class="card-body">
                     <h2 class="fw-bold"><asp:Label ID="lblTongTaiKhoan" runat="server" Text="0"></asp:Label></h2>
                     <p class="mb-0 fs-5">Tài khoản người dùng</p>
                     <i class="fas fa-user-plus position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
                 </div>
-                <div class="card-footer border-0 text-center" style="background-color: #d68910;">
+                <div class="card-footer border-0 text-center" style="background-color: #7d3c98;">
                     <a href="../Admin/DanhSachTaiKhoan.aspx" class="text-white text-decoration-none small">Danh sách tài khoản <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
