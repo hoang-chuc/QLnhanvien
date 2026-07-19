@@ -13,7 +13,7 @@ namespace QLNhanVien
         {
             if (Session["Username"] == null || Session["MaNV"] == null)
             {
-                Response.Redirect("~/Pages/Auth/Login.aspx");
+                Response.Redirect("/Pages/Auth/Login.aspx");
             }
 
             if (!IsPostBack)

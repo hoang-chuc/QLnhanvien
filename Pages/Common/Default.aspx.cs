@@ -16,7 +16,7 @@ namespace QLNhanVien
         {
             if (Session["Role"] == null)
             {
-                Response.Redirect("~/Pages/Auth/Login.aspx");
+                Response.Redirect("/Pages/Auth/Login.aspx");
             }
 
             if (!IsPostBack)

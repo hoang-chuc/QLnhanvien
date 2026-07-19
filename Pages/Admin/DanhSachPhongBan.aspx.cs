@@ -14,7 +14,7 @@ namespace QLNhanVien
             // Chỉ cho phép Admin vào xem cấu hình phòng ban/chức vụ
             if (Session["Username"] == null || Session["Role"].ToString() != "Admin")
             {
-                Response.Redirect("~/Pages/Common/Default.aspx");
+                Response.Redirect("/Pages/Common/Default.aspx");
             }
 
             if (!IsPostBack)

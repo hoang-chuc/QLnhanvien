@@ -11,7 +11,7 @@ namespace QLNhanVien
         {
             if (Session["Username"] == null)
             {
-                Response.Redirect("~/Pages/Auth/Login.aspx");
+                Response.Redirect("/Pages/Auth/Login.aspx");
             }
             else
             {

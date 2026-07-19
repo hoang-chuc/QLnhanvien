@@ -14,7 +14,7 @@ namespace QLNhanVien
         {
             if (Session["Role"] == null || Session["Role"].ToString() == "NhanVien")
             {
-                Response.Redirect("~/Pages/Auth/Login.aspx");
+                Response.Redirect("/Pages/Auth/Login.aspx");
             }
 
             if (!IsPostBack)

@@ -20,7 +20,7 @@ namespace QLNhanVien
             // Chỉ Admin mới được xem thống kê tổng
             if (Session["Role"] == null || Session["Role"].ToString() != "Admin")
             {
-                Response.Redirect("~/Pages/Common/Default.aspx");
+                Response.Redirect("/Pages/Common/Default.aspx");
             }
 
             if (!IsPostBack)

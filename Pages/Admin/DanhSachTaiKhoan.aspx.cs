@@ -15,7 +15,7 @@ namespace QLNhanVien
             // Chỉ Admin mới được phép ở lại trang này, nếu không phải đá về trang chủ
             if (Session["Username"] == null || Session["Role"].ToString() != "Admin")
             {
-                Response.Redirect("~/Pages/Common/Default.aspx");
+                Response.Redirect("/Pages/Common/Default.aspx");
             }
 
             if (!IsPostBack)

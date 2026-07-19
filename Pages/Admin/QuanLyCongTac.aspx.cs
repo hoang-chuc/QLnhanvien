@@ -14,7 +14,7 @@ namespace QLNhanVien
             // Kiểm tra quyền: Chỉ Admin hoặc Quản lý mới được vào xem lịch sử
             if (Session["Username"] == null || (Session["Role"].ToString() != "Admin" && Session["Role"].ToString() != "QuanLy"))
             {
-                Response.Redirect("~/Pages/Common/Default.aspx");
+                Response.Redirect("/Pages/Common/Default.aspx");
             }
 
             if (!IsPostBack)
