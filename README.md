@@ -6,7 +6,6 @@
 
 - ASP.NET Web Forms (.NET Framework 4.7.2)
 - SQL Server (Windows Authentication)
-- Bootstrap 5.3.2 + Font Awesome 6.4.2
 - Chart.js
 
 ## Cấu trúc thư mục
