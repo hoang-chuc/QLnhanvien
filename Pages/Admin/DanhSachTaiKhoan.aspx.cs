@@ -25,19 +25,33 @@ namespace QLNhanVien
             }
         }
 
-        private void LoadDanhSachTaiKhoan()
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            LoadDanhSachTaiKhoan(txtSearch.Text.Trim());
+        }
+
+        private void LoadDanhSachTaiKhoan(string keyword = "")
         {
             using (SqlConnection conn = new SqlConnection(strConn))
             {
-                // Truy vấn lấy toàn bộ thông tin tài khoản và nối với bảng Nhân Viên để lấy tên Chủ sở hữu
                 string sql = @"SELECT t.MaTK, t.Username, t.PasswordHash, 
                                       ISNULL(n.HoTen, N'Tài khoản Quản trị HT') AS TenNhanVien, 
                                       t.Role, t.TrangThai, t.NgayTao 
                                FROM TaiKhoan t
                                LEFT JOIN NhanVien n ON t.MaNV = n.MaNV
-                               ORDER BY t.Role ASC, t.Username ASC";
+                               WHERE 1=1";
+
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    sql += " AND (t.Username LIKE @Keyword OR ISNULL(n.HoTen, '') LIKE @Keyword)";
+                }
+
+                sql += " ORDER BY t.Role ASC, t.Username ASC";
 
                 SqlCommand cmd = new SqlCommand(sql, conn);
+                if (!string.IsNullOrEmpty(keyword))
+                    cmd.Parameters.AddWithValue("@Keyword", "%" + keyword + "%");
+
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);

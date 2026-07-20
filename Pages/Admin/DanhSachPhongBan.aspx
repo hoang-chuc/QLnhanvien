@@ -4,6 +4,15 @@
     <div class="content-header d-flex justify-content-between align-items-center mb-3 bg-light p-2 border-bottom">
         <h3 class="fs-4 mb-0 fw-normal">Phòng ban & Chức vụ</h3>
         <small class="text-muted"><i class="fas fa-tachometer-alt"></i> Hệ thống > Phòng ban & Chức vụ</small>
+        <div class="d-flex align-items-center">
+            <label class="me-2 fw-bold text-secondary">Search:</label>
+            <div class="input-group" style="width: 250px;">
+                <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control form-control-sm" Placeholder="Nhập tên phòng ban/chức vụ..." onkeyup="debounceSearch()"></asp:TextBox>
+                <asp:LinkButton ID="btnSearch" runat="server" CssClass="btn btn-sm btn-secondary" OnClick="btnSearch_Click">
+                    <i class="fas fa-search"></i>
+                </asp:LinkButton>
+            </div>
+        </div>
     </div>
 
     <div class="content-body">
@@ -45,4 +54,13 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        var searchTimer = null;
+        function debounceSearch() {
+            if (searchTimer) clearTimeout(searchTimer);
+            searchTimer = setTimeout(function () {
+                __doPostBack('<%= btnSearch.UniqueID %>', '');
+            }, 500);
+        }
+    </script>
 </asp:Content>
