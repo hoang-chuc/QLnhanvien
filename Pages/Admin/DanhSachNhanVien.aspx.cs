@@ -183,7 +183,9 @@ namespace QLNhanVien
                         txtHoTen.Text = dr["HoTen"].ToString();
                         if (dr["NgaySinh"] != DBNull.Value)
                             txtNgaySinh.Text = Convert.ToDateTime(dr["NgaySinh"]).ToString("yyyy-MM-dd");
-                        ddlGioiTinh.SelectedValue = dr["GioiTinh"].ToString();
+                        string gioiTinh = dr["GioiTinh"].ToString();
+                        if (ddlGioiTinh.Items.FindByValue(gioiTinh) != null)
+                            ddlGioiTinh.SelectedValue = gioiTinh;
                         txtCCCD.Text = dr["CCCD"].ToString();
                         txtSDT.Text = dr["SDT"].ToString();
                         txtEmail.Text = dr["Email"].ToString();
@@ -191,7 +193,9 @@ namespace QLNhanVien
                         if (dr["MaPB"] != DBNull.Value) ddlPhongBan.SelectedValue = dr["MaPB"].ToString();
                         if (dr["MaCV"] != DBNull.Value) ddlChucVu.SelectedValue = dr["MaCV"].ToString();
                         txtLuong.Text = Convert.ToInt32(dr["LuongCoBan"]).ToString();
-                        ddlTrangThai.SelectedValue = dr["TrangThai"].ToString();
+                        string trangThai = dr["TrangThai"].ToString();
+                        if (ddlTrangThai.Items.FindByValue(trangThai) != null)
+                            ddlTrangThai.SelectedValue = trangThai;
 
                         lblFormTitle.Text = "Cập nhật thông tin nhân viên (Mã: MNV" + maNV + ")";
                         mvNhanVien.ActiveViewIndex = 1;
