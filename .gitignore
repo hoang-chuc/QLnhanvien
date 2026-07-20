@@ -7,3 +7,4 @@ packages/
 Tester/node_modules/
 Tester/playwright-report/
 Tester/test-results/
+Uploads/

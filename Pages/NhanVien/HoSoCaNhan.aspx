@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Hồ sơ cá nhân" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="HoSoCaNhan.aspx.cs" Inherits="QLNhanVien.HoSoCaNhan" %>
+<%@ Page Title="Hồ sơ cá nhân" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="HoSoCaNhan.aspx.cs" Inherits="QLNhanVien.HoSoCaNhan" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="content-header d-flex justify-content-between align-items-center mb-3 bg-light p-2 border-bottom">
@@ -15,8 +15,9 @@
                         <h4 class="fw-bold text-dark"><asp:Label ID="lblHoTenTitle" runat="server" /></h4>
                         <p class="text-muted mb-0"><asp:Label ID="lblChucVuTitle" runat="server" /></p>
                         <hr />
-                        <div class="d-grid">
-                            <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-camera"></i> Đổi ảnh đại diện</button>
+                        <div class="d-grid gap-2">
+                            <asp:FileUpload ID="fuAvatar" runat="server" CssClass="form-control form-control-sm" />
+                            <asp:Button ID="btnUploadAvatar" runat="server" Text="Tải ảnh đại diện" CssClass="btn btn-outline-primary btn-sm" OnClick="btnUploadAvatar_Click" />
                         </div>
                     </div>
                 </div>
@@ -24,10 +25,16 @@
 
             <div class="col-md-8">
                 <div class="card shadow-sm border-0 border-top border-primary border-3">
-                    <div class="card-header bg-white p-3">
-                        <h5 class="mb-0 fw-bold"><i class="fas fa-info-circle me-2 text-primary"></i>Thông tin chi tiết</h5>
+                    <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-info-circle me-2"></i>Thông tin chi tiết</h5>
+                        <div>
+                            <asp:Button ID="btnEdit" runat="server" Text="Chỉnh sửa" CssClass="btn btn-sm btn-primary" OnClick="btnEdit_Click" />
+                            <asp:Button ID="btnSave" runat="server" Text="Lưu thay đổi" CssClass="btn btn-sm btn-success me-1" Visible="false" OnClick="btnSave_Click" />
+                            <asp:Button ID="btnCancel" runat="server" Text="Hủy" CssClass="btn btn-sm btn-secondary" Visible="false" OnClick="btnCancel_Click" />
+                        </div>
                     </div>
                     <div class="card-body p-4">
+                        <asp:Label ID="lblMsg" runat="server" CssClass="mb-2 d-block" />
                         <div class="row mb-3">
                             <div class="col-sm-4 fw-bold text-secondary">Mã nhân viên:</div>
                             <div class="col-sm-8 text-dark fw-bold text-primary">MNV<asp:Label ID="lblMaNV" runat="server" /></div>
@@ -56,17 +63,26 @@
                             <div class="col-sm-4 fw-bold text-secondary">Chức vụ:</div>
                             <div class="col-sm-8"><asp:Label ID="lblChucVu" runat="server" /></div>
                         </div>
-                        <div class="row mb-3 border-top pt-2">
+                        <div class="row mb-3 border-top pt-2 align-items-center">
                             <div class="col-sm-4 fw-bold text-secondary">Số điện thoại:</div>
-                            <div class="col-sm-8"><asp:Label ID="lblSDT" runat="server" /></div>
+                            <div class="col-sm-8">
+                                <asp:Label ID="lblSDT" runat="server" />
+                                <asp:TextBox ID="txtSDT" runat="server" CssClass="form-control form-control-sm" Visible="false" />
+                            </div>
                         </div>
-                        <div class="row mb-3 border-top pt-2">
+                        <div class="row mb-3 border-top pt-2 align-items-center">
                             <div class="col-sm-4 fw-bold text-secondary">Email liên hệ:</div>
-                            <div class="col-sm-8"><asp:Label ID="lblEmail" runat="server" /></div>
+                            <div class="col-sm-8">
+                                <asp:Label ID="lblEmail" runat="server" />
+                                <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control form-control-sm" Visible="false" TextMode="Email" />
+                            </div>
                         </div>
-                        <div class="row mb-3 border-top pt-2">
+                        <div class="row mb-3 border-top pt-2 align-items-center">
                             <div class="col-sm-4 fw-bold text-secondary">Địa chỉ thường trú:</div>
-                            <div class="col-sm-8"><asp:Label ID="lblDiaChi" runat="server" /></div>
+                            <div class="col-sm-8">
+                                <asp:Label ID="lblDiaChi" runat="server" />
+                                <asp:TextBox ID="txtDiaChi" runat="server" CssClass="form-control form-control-sm" Visible="false" />
+                            </div>
                         </div>
                     </div>
                 </div>

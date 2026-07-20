@@ -30,7 +30,6 @@ namespace QLNhanVien
         {
             using (SqlConnection conn = new SqlConnection(strConn))
             {
-                // CẬP NHẬT: JOIN thêm bảng ChucVu để lấy HeSoLuong
                 string sql = @"SELECT l.MaLuong, l.MaNV, n.HoTen, p.TenPhongBan, c.HeSoLuong,
                                       l.LuongCoBan, l.Thuong, l.Phat, l.TongLuong, l.DaThanhToan
                                FROM Luong l
@@ -44,6 +43,12 @@ namespace QLNhanVien
                     sql += " AND n.MaPB = @MaPB_QuanLy ";
                 }
 
+                string keyword = txtSearchNV.Text.Trim();
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    sql += " AND (n.HoTen LIKE @Keyword OR CAST(n.MaNV AS VARCHAR) LIKE @Keyword) ";
+                }
+
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@Thang", ddlThang.SelectedValue);
                 cmd.Parameters.AddWithValue("@Nam", txtNam.Text.Trim());
@@ -51,6 +56,11 @@ namespace QLNhanVien
                 if (Session["Role"].ToString() == "QuanLy")
                 {
                     cmd.Parameters.AddWithValue("@MaPB_QuanLy", Session["MaPB_QuanLy"]);
+                }
+
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    cmd.Parameters.AddWithValue("@Keyword", "%" + keyword + "%");
                 }
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);

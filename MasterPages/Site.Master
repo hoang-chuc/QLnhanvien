@@ -10,41 +10,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
     <link href="<%= ResolveUrl("~/Assets/CSS/style.css?v=1.0.5") %>" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // --- Global UX Toast Notification Helper ---
-        // Khai bao som trong <head> de cac trang goi tu ClientScript.RegisterStartupScript deu hoat dong
-        window.showToast = function (message, type) {
-            var container = document.getElementById("toastContainer");
-            if (!container) return;
-
-            var bgClass = "bg-success";
-            var icon = "fa-check-circle";
-            if (type === "error" || type === "danger") {
-                bgClass = "bg-danger";
-                icon = "fa-exclamation-triangle";
-            } else if (type === "warning") {
-                bgClass = "bg-warning text-dark";
-                icon = "fa-exclamation-circle";
-            } else if (type === "info") {
-                bgClass = "bg-info text-white";
-                icon = "fa-info-circle";
-            }
-
-            var toastId = "toast_" + Date.now();
-            var toastHtml = '<div id="' + toastId + '" class="toast align-items-center text-white ' + bgClass + ' border-0 shadow-lg fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">' +
-                '<div class="d-flex"><div class="toast-body"><i class="fas ' + icon + ' me-2"></i>' + message + '</div>' +
-                '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>';
-            container.insertAdjacentHTML("beforeend", toastHtml);
-            var toastElement = document.getElementById(toastId);
-            var bsToast = new bootstrap.Toast(toastElement);
-            bsToast.show();
-
-            toastElement.addEventListener('hidden.bs.toast', function () {
-                toastElement.remove();
-            });
-        };
-    </script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -58,14 +23,16 @@
                 <div class="sidebar-user">
                     <img src="https://ui-avatars.com/api/?name=<%= Session["Username"] %>&background=random&color=fff" alt="User Image" />
                     <div class="info">
-                        <p>                        <asp:Label ID="lblUserName" runat="server"></asp:Label></p>
+                        <p><asp:Label ID="lblUserName" runat="server"></asp:Label></p>
                         <small>
                             <i class="fas fa-circle text-success"></i> 
                             <% 
                                 if (Session["Role"] != null && Session["Role"].ToString() == "QuanLy") {
-                                    Response.Write("Quản lý nhân viên phòng " + Session["TenPBQuanLy"]);
+                                    Response.Write("Quản lý");
+                                } else if (Session["Role"] != null && Session["Role"].ToString() == "Admin") {
+                                    Response.Write("Admin");
                                 } else {
-                                    Response.Write(Session["Role"] ?? "Chưa đăng nhập");
+                                    Response.Write("Nhân viên");
                                 }
                             %>
                         </small>
@@ -73,10 +40,7 @@
                 </div>
 
                 <div class="sidebar-search">
-                    <div class="sidebar-search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="sidebarSearch" placeholder="Tìm kiếm menu..." autocomplete="off" aria-label="Tìm kiếm menu" />
-                    </div>
+                    <input type="text" id="sidebarSearch" placeholder="Tìm kiếm menu..." />
                 </div>
 
                 <ul class="sidebar-menu">
@@ -124,26 +88,44 @@
                             <i class="far fa-envelope"></i>
                             <% 
                                 if (Session["Role"] != null && Session["Role"].ToString() != "NhanVien") {
-                                    // Đếm đơn chờ duyệt
                                     int pending = 0;
                                     try {
                                         string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["QLNhanVienConn"].ConnectionString;
-            string sql = "SELECT COUNT(*) FROM NghiPhep WHERE TrangThai = N'Chờ duyệt'";
-            bool laQuanLy = Session["Role"].ToString() == "QuanLy" && Session["MaPB_QuanLy"] != null;
-            if (laQuanLy)
-                sql = "SELECT COUNT(*) FROM NghiPhep np INNER JOIN NhanVien n ON np.MaNV=n.MaNV WHERE np.TrangThai=N'Chờ duyệt' AND n.MaPB=@MaPB";
-            using (var conn2 = new System.Data.SqlClient.SqlConnection(connStr))
-            using (var cmd2 = new System.Data.SqlClient.SqlCommand(sql, conn2)) {
-                if (laQuanLy) cmd2.Parameters.AddWithValue("@MaPB", Session["MaPB_QuanLy"]);
-                conn2.Open();
-                pending = (int)cmd2.ExecuteScalar();
-            }
+                                        string sql = "SELECT COUNT(*) FROM NghiPhep WHERE TrangThai = N'Chờ duyệt'";
+                                        bool laQuanLy = Session["Role"].ToString() == "QuanLy" && Session["MaPB_QuanLy"] != null;
+                                        if (laQuanLy)
+                                            sql = "SELECT COUNT(*) FROM NghiPhep np INNER JOIN NhanVien n ON np.MaNV=n.MaNV WHERE np.TrangThai=N'Chờ duyệt' AND n.MaPB=@MaPB";
+                                        using (var conn2 = new System.Data.SqlClient.SqlConnection(connStr))
+                                        using (var cmd2 = new System.Data.SqlClient.SqlCommand(sql, conn2)) {
+                                            if (laQuanLy) cmd2.Parameters.AddWithValue("@MaPB", Session["MaPB_QuanLy"]);
+                                            conn2.Open();
+                                            pending = (int)cmd2.ExecuteScalar();
+                                        }
                                     } catch {}
                                     if (pending > 0) { %>
                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">
                                             <%= pending %>
                                         </span>
                                     <% } 
+                                }
+                            %>
+                        </a>
+                        <a href="#" id="darkModeToggle" class="me-3 text-white" title="Chuyển chế độ sáng/tối">
+                            <i class="fas fa-moon"></i>
+                        </a>
+                        <div class="user-dropdown d-flex align-items-center">
+                            <a href="<%= ResolveUrl("~/Pages/Common/DoiMatKhau.aspx") %>" class="text-white text-decoration-none ms-2 me-1" title="Đổi mật khẩu">
+                                <i class="fas fa-key"></i> Đổi mật khẩu
+                            </a>
+                            <asp:LinkButton ID="btnLogout" runat="server" OnClick="btnLogout_Click" CssClass="text-white text-decoration-none ms-3">
+                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                            </asp:LinkButton>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Toast Container for UX Notifications -->
+                <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
 
                 <div class="p-3">
                     <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>

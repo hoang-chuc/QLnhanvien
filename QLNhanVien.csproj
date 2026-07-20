@@ -105,6 +105,7 @@
     <Content Include="Pages\Admin\DanhSachTaiKhoan.aspx" />
     <Content Include="Pages\Common\Default.aspx" />
     <Content Include="Pages\Common\HopThuNghiPhep.aspx" />
+    <Content Include="Pages\Common\DoiMatKhau.aspx" />
     <Content Include="Pages\NhanVien\HoSoCaNhan.aspx" />
     <Content Include="Pages\Auth\Login.aspx" />
     <Content Include="Pages\Admin\DanhSachNhanVien.aspx" />
@@ -127,6 +128,13 @@
     <Compile Include="Pages\Common\HopThuNghiPhep.aspx.cs">
       <DependentUpon>HopThuNghiPhep.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Common\DoiMatKhau.aspx.cs">
+      <DependentUpon>DoiMatKhau.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Common\DoiMatKhau.aspx.designer.cs">
+      <DependentUpon>DoiMatKhau.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Common\HopThuNghiPhep.aspx.designer.cs">
       <DependentUpon>HopThuNghiPhep.aspx</DependentUpon>

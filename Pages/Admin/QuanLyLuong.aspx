@@ -30,10 +30,14 @@
                     <asp:TextBox ID="txtNam" runat="server" CssClass="form-control" TextMode="Number"></asp:TextBox>
                 </div>
                 <div class="col-md-3">
-                    <asp:Button ID="btnXem" runat="server" Text="Xem bảng lương" CssClass="btn btn-secondary w-100" OnClick="btnXem_Click" />
+                    <label class="form-label fw-bold">Tìm kiếm:</label>
+                    <asp:TextBox ID="txtSearchNV" runat="server" CssClass="form-control" placeholder="Tên hoặc mã NV..."></asp:TextBox>
                 </div>
-                <div class="col-md-3 ms-auto">
-                    <asp:Button ID="btnTaoBangLuong" runat="server" Text="+ Khởi tạo lương tháng này" CssClass="btn btn-success w-100" OnClick="btnTaoBangLuong_Click" OnClientClick="return confirm('Bạn có chắc muốn khởi tạo bảng lương cho tháng này không?');" />
+                <div class="col-md-2">
+                    <asp:Button ID="btnXem" runat="server" Text="Tìm kiếm" CssClass="btn btn-secondary w-100" OnClick="btnXem_Click" />
+                </div>
+                <div class="col-md-3">
+                    <asp:Button ID="btnTaoBangLuong" runat="server" Text="+ Khởi tạo lương tháng" CssClass="btn btn-success w-100" OnClick="btnTaoBangLuong_Click" OnClientClick="return confirm('Bạn có chắc muốn khởi tạo bảng lương cho tháng này không?');" />
                 </div>
             </div>
         </div>
