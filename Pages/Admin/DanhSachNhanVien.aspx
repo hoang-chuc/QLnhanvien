@@ -20,7 +20,7 @@
                         <div class="d-flex align-items-center">
                             <label class="me-2 fw-bold text-secondary">Search:</label>
                             <div class="input-group" style="width: 250px;">
-                                <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control form-control-sm" Placeholder="Nhập tên nhân viên..."></asp:TextBox>
+                                <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control form-control-sm" Placeholder="Nhập tên nhân viên..." onkeyup="debounceSearch()"></asp:TextBox>
                                 <asp:LinkButton ID="btnSearch" runat="server" CssClass="btn btn-sm btn-secondary" OnClick="btnSearch_Click">
                                     <i class="fas fa-search"></i>
                                 </asp:LinkButton>
@@ -150,4 +150,13 @@
 
         </asp:MultiView>
     </div>
+    <script type="text/javascript">
+        var searchTimer = null;
+        function debounceSearch() {
+            if (searchTimer) clearTimeout(searchTimer);
+            searchTimer = setTimeout(function () {
+                __doPostBack('<%= btnSearch.UniqueID %>', '');
+            }, 500);
+        }
+    </script>
 </asp:Content>
