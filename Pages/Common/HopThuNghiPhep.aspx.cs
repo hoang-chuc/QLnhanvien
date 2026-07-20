@@ -40,7 +40,7 @@ namespace QLNhanVien
 
             if (soNgay <= 0)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu!');", true);
+                ShowMsg("Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu!", false);
                 return;
             }
 
@@ -58,7 +58,7 @@ namespace QLNhanVien
                 conn.Open();
                 cmd.ExecuteNonQuery();
 
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Đã gửi đơn xin nghỉ thành công!');", true);
+                ShowMsg("Gửi đơn xin nghỉ thành công! Vui lòng chờ quản lý duyệt.", true);
                 txtTuNgay.Text = txtDenNgay.Text = txtLyDo.Text = "";
                 LoadLichSuNghiPhep();
             }
@@ -166,6 +166,13 @@ namespace QLNhanVien
                 LoadDanhSachDon();
                 mvHopThu.ActiveViewIndex = 1;
             }
+        }
+
+        private void ShowMsg(string msg, bool ok)
+        {
+            string type = ok ? "success" : "danger";
+            string escapedMsg = msg.Replace("'", "\\'").Replace("\r", "").Replace("\n", " ");
+            ClientScript.RegisterStartupScript(this.GetType(), "toastMsg", $"window.showToast('{escapedMsg}', '{type}');", true);
         }
     }
 }

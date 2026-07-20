@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Quản lý lương" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="QuanLyLuong.aspx.cs" Inherits="QLNhanVien.QuanLyLuong" %>
+<%@ Page Title="Quản lý lương" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="QuanLyLuong.aspx.cs" Inherits="QLNhanVien.QuanLyLuong" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="content-header d-flex justify-content-between align-items-center mb-3 bg-light p-2 border-bottom">
@@ -38,6 +38,8 @@
             </div>
         </div>
     </div>
+
+    <asp:Label ID="lblMsg" runat="server" CssClass="mb-2 d-block" />
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">

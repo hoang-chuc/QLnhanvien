@@ -22,7 +22,8 @@ namespace QLNhanVien
 
             if (Session["Role"].ToString() == "NhanVien")
             {
-                LoadEmployeeDashboard();
+                if (!IsPostBack)
+                    LoadEmployeeDashboard();
             }
             else
             {
@@ -239,7 +240,9 @@ namespace QLNhanVien
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Không có dữ liệu để xuất trong tháng này!');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "nodata",
+                    "var el=document.createElement('div');el.className='alert alert-warning alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';el.style.zIndex=9999;el.innerHTML='<i class=\'fas fa-info-circle me-2\'></i>Không có dữ liệu để xuất trong tháng này!<button type=\'button\' class=\'btn-close\' data-bs-dismiss=\'alert\'></button>';document.body.appendChild(el);setTimeout(()=>el.remove(),4000);",
+                    true);
             }
         }
 

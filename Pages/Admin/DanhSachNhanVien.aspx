@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Danh sách nhân viên" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="DanhSachNhanVien.aspx.cs" Inherits="QLNhanVien.DanhSachNhanVienPage" %>
+<%@ Page Title="Danh sách nhân viên" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="DanhSachNhanVien.aspx.cs" Inherits="QLNhanVien.DanhSachNhanVienPage" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     
@@ -8,6 +8,7 @@
     </div>
 
     <div class="content-body">
+        <asp:Label ID="lblMsg" runat="server" CssClass="mb-2 d-block" />
         <asp:MultiView ID="mvNhanVien" runat="server" ActiveViewIndex="0">
             
             <asp:View ID="vDanhSach" runat="server">

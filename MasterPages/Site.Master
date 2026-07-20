@@ -9,7 +9,7 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
-    <link href="<%= ResolveUrl("~/Assets/CSS/style.css") %>" rel="stylesheet" type="text/css" />
+    <link href="<%= ResolveUrl("~/Assets/CSS/style.css?v=1.0.5") %>" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <form id="form1" runat="server">
@@ -38,7 +38,10 @@
                 </div>
 
                 <div class="sidebar-search">
-                    <input type="text" placeholder="Tìm kiếm..." />
+                    <div class="sidebar-search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="sidebarSearch" placeholder="Tìm kiếm menu..." autocomplete="off" aria-label="Tìm kiếm menu" />
+                    </div>
                 </div>
 
                 <ul class="sidebar-menu">
@@ -79,13 +82,39 @@
             <div class="main-content">
                 <header class="top-navbar">
                     <div class="nav-left-toggle">
-                        <a href="#" class="text-white text-decoration-none fs-4"><i class="fas fa-bars"></i></a>
+                        <a href="#" id="sidebarToggle" class="text-white text-decoration-none fs-4" title="Thu gọn/mở rộng menu"><i class="fas fa-bars"></i></a>
                     </div>
                     <div class="nav-right d-flex align-items-center">
                         <a href="<%= ResolveUrl("~/Pages/Common/HopThuNghiPhep.aspx") %>" class="position-relative me-3 text-white" title="Hộp thư xin nghỉ">
                             <i class="far fa-envelope"></i>
+                            <% 
+                                if (Session["Role"] != null && Session["Role"].ToString() != "NhanVien") {
+                                    // Đếm đơn chờ duyệt
+                                    int pending = 0;
+                                    try {
+                                        string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["QLNhanVienConn"].ConnectionString;
+            string sql = "SELECT COUNT(*) FROM NghiPhep WHERE TrangThai = N'Chờ duyệt'";
+            bool laQuanLy = Session["Role"].ToString() == "QuanLy" && Session["MaPB_QuanLy"] != null;
+            if (laQuanLy)
+                sql = "SELECT COUNT(*) FROM NghiPhep np INNER JOIN NhanVien n ON np.MaNV=n.MaNV WHERE np.TrangThai=N'Chờ duyệt' AND n.MaPB=@MaPB";
+            using (var conn2 = new System.Data.SqlClient.SqlConnection(connStr))
+            using (var cmd2 = new System.Data.SqlClient.SqlCommand(sql, conn2)) {
+                if (laQuanLy) cmd2.Parameters.AddWithValue("@MaPB", Session["MaPB_QuanLy"]);
+                conn2.Open();
+                pending = (int)cmd2.ExecuteScalar();
+            }
+                                    } catch {}
+                                    if (pending > 0) { %>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">
+                                            <%= pending %>
+                                        </span>
+                                    <% } 
+                                }
+                            %>
                         </a>
-                        <a href="#" class="position-relative me-3 text-white"><i class="far fa-bell"></i></a>
+                        <a href="#" id="darkModeToggle" class="me-3 text-white" title="Chuyển chế độ sáng/tối">
+                            <i class="fas fa-moon"></i>
+                        </a>
                         <div class="user-dropdown d-flex align-items-center">
                             <asp:LinkButton ID="btnLogout" runat="server" OnClick="btnLogout_Click" CssClass="text-white text-decoration-none ms-3">
                                 <i class="fas fa-sign-out-alt"></i> Đăng xuất
@@ -93,6 +122,9 @@
                         </div>
                     </div>
                 </header>
+
+                <!-- Toast Container for UX Notifications -->
+                <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
 
                 <div class="p-3">
                     <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
@@ -104,6 +136,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // --- Dark Mode Logic ---
+            var toggle = document.getElementById("darkModeToggle");
+            var currentTheme = localStorage.getItem("theme") || "light";
+            
+            if (currentTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                toggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            toggle.addEventListener("click", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (document.body.classList.contains("dark-mode")) {
+                    document.body.classList.remove("dark-mode");
+                    localStorage.setItem("theme", "light");
+                    toggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    document.body.classList.add("dark-mode");
+                    localStorage.setItem("theme", "dark");
+                    toggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
+
+            // --- Menu Active Logic ---
             var currentPath = window.location.pathname.toLowerCase();
             var menuItems = document.querySelectorAll(".sidebar-menu li");
             menuItems.forEach(function(item) {
@@ -128,13 +184,86 @@
             });
             
             if (!activeFound) {
-                // If it is Default or home directory, highlight the first item (Tổng quan)
                 var overviewLi = document.querySelector(".sidebar-menu li:nth-child(2)");
                 if (overviewLi) {
                     overviewLi.classList.add("active");
                 }
             }
         });
+
+        // --- Global UX Toast Notification Helper ---
+        window.showToast = function(message, type) {
+            var container = document.getElementById("toastContainer");
+            if (!container) return;
+
+            var bgClass = "bg-success";
+            var icon = "fa-check-circle";
+            if (type === "error" || type === "danger") {
+                bgClass = "bg-danger";
+                icon = "fa-exclamation-triangle";
+            } else if (type === "warning") {
+                bgClass = "bg-warning text-dark";
+                icon = "fa-exclamation-circle";
+            } else if (type === "info") {
+                bgClass = "bg-info text-white";
+                icon = "fa-info-circle";
+            }
+
+            var toastId = "toast_" + Date.now();
+            var toastHtml = `
+                <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0 shadow-lg fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas ${icon} me-2"></i>${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML("beforeend", toastHtml);
+            var toastElement = document.getElementById(toastId);
+            var bsToast = new bootstrap.Toast(toastElement);
+            bsToast.show();
+            
+            toastElement.addEventListener('hidden.bs.toast', function () {
+                toastElement.remove();
+            });
+        };
+
+        // --- Sidebar Search (lọc menu realtime) ---
+        var sidebarSearch = document.getElementById("sidebarSearch");
+        if (sidebarSearch) {
+            sidebarSearch.addEventListener("input", function () {
+                var term = this.value.trim().toLowerCase();
+                var menu = document.querySelector(".sidebar-menu");
+                if (!menu) return;
+                menu.querySelectorAll("li:not(.header)").forEach(function (li) {
+                    var a = li.querySelector("a");
+                    if (!a) return;
+                    var match = term === "" || a.textContent.toLowerCase().indexOf(term) !== -1;
+                    li.style.display = match ? "" : "none";
+                });
+                menu.querySelectorAll("li.header").forEach(function (h) {
+                    var next = h.nextElementSibling;
+                    var visible = false;
+                    while (next && !next.classList.contains("header")) {
+                        if (next.style.display !== "none") { visible = true; break; }
+                        next = next.nextElementSibling;
+                    }
+                    h.style.display = visible ? "" : "none";
+                });
+            });
+        }
+
+        // --- Sidebar Toggle (thu gọn / mở rộng) ---
+        var sidebarToggle = document.getElementById("sidebarToggle");
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener("click", function (e) {
+                e.preventDefault();
+                var wrapper = document.querySelector(".wrapper");
+                if (wrapper) wrapper.classList.toggle("sidebar-collapsed");
+            });
+        }
     </script>
 </body>
 </html>

@@ -107,11 +107,11 @@ namespace QLNhanVien
 
                 if (rowsAffected > 0)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Khởi tạo thành công lương cho {rowsAffected} nhân viên!');", true);
+                    ShowMsg($"Khởi tạo thành công lương cho {rowsAffected} nhân viên trong tháng!", true);
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Mọi nhân viên hiện tại đều đã có dữ liệu lương trong tháng này, không có thêm dòng mới nào.');", true);
+                    ShowMsg("Mọi nhân viên hiện tại đều đã có dữ liệu lương trong tháng này.", false);
                 }
 
                 LoadBangLuong();
@@ -169,6 +169,13 @@ namespace QLNhanVien
 
             gvLuong.EditIndex = -1;
             LoadBangLuong();
+        }
+
+        private void ShowMsg(string msg, bool ok)
+        {
+            string type = ok ? "success" : "warning";
+            string escapedMsg = msg.Replace("'", "\\'").Replace("\r", "").Replace("\n", " ");
+            ClientScript.RegisterStartupScript(this.GetType(), "toastMsg", $"window.showToast('{escapedMsg}', '{type}');", true);
         }
     }
 }

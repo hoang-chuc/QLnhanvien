@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Quản lý công tác & Nghỉ phép" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="QuanLyCongTac.aspx.cs" Inherits="QLNhanVien.QuanLyCongTacPage" %>
+<%@ Page Title="Quản lý công tác & Nghỉ phép" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="QuanLyCongTac.aspx.cs" Inherits="QLNhanVien.QuanLyCongTacPage" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     
@@ -8,6 +8,8 @@
     </div>
 
     <div class="content-body">
+        <asp:Label ID="lblMsg" runat="server" CssClass="mb-2 d-block" />
+
         <div class="box border-primary" style="border-top: 3px solid #0d6efd;">
             <div class="box-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
                 <h5 class="mb-0 text-muted">Danh sách đơn xin nghỉ phép</h5>
@@ -24,7 +26,7 @@
             </div>
 
             <div class="box-body table-responsive p-3 bg-white">
-                <asp:GridView ID="gvNghiPhep" runat="server" CssClass="table table-hover align-middle" AutoGenerateColumns="False" GridLines="Horizontal" BorderWidth="0">
+                <asp:GridView ID="gvNghiPhep" runat="server" CssClass="table table-hover align-middle" AutoGenerateColumns="False" GridLines="Horizontal" BorderWidth="0" DataKeyNames="MaDon" OnRowCommand="gvNghiPhep_RowCommand">
                     <HeaderStyle BackColor="#f8f9fa" ForeColor="#333" Font-Bold="true" BorderColor="#dee2e6" />
                     <Columns>
                         <asp:TemplateField HeaderText="STT">
@@ -65,6 +67,26 @@
                         </asp:TemplateField>
 
                         <asp:BoundField DataField="NgayTao" HeaderText="Ngày gửi đơn" DataFormatString="{0:dd-MM-yyyy HH:mm}" />
+
+                        <asp:TemplateField HeaderText="Thao tác">
+                            <ItemTemplate>
+                                <asp:LinkButton ID="btnDuyet" runat="server"
+                                    CommandName="Duyet" CommandArgument='<%# Eval("MaDon") %>'
+                                    CssClass="btn btn-success btn-sm me-1"
+                                    Visible='<%# Eval("TrangThai").ToString() != "Đã duyệt" %>'
+                                    OnClientClick="return confirm('Xác nhận duyệt đơn này?');">
+                                    <i class="fas fa-check"></i> Duyệt
+                                </asp:LinkButton>
+                                <asp:LinkButton ID="btnTuChoi" runat="server"
+                                    CommandName="TuChoi" CommandArgument='<%# Eval("MaDon") %>'
+                                    CssClass="btn btn-danger btn-sm"
+                                    Visible='<%# Eval("TrangThai").ToString() != "Từ chối" %>'
+                                    OnClientClick="return confirm('Xác nhận từ chối đơn này?');">
+                                    <i class="fas fa-times"></i> Từ chối
+                                </asp:LinkButton>
+                            </ItemTemplate>
+                            <ItemStyle HorizontalAlign="Center" Width="160px" />
+                        </asp:TemplateField>
                     </Columns>
                     <EmptyDataTemplate>
                         <div class="text-center p-4 text-muted">Không có dữ liệu đơn xin nghỉ nào.</div>

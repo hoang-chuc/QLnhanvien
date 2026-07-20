@@ -1,202 +1,228 @@
 <%@ Page Title="Tổng quan" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="QLNhanVien.Default" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="content-header d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+    <div class="content-header d-flex justify-content-between align-items-center mb-0 border-bottom pb-2">
         <h3 class="fs-4 mb-0 fw-bold text-primary">Tổng quan</h3>
-        <small class="text-muted">Hệ thống Quản lý Nhân sự | IPlus</small>
+        <small class="text-muted"><i class="fas fa-tachometer-alt me-1"></i>Hệ thống Quản lý Nhân sự | IPlus</small>
     </div>
 
     <% string role = Session["Role"] != null ? Session["Role"].ToString() : ""; %>
 
+    <%-- ===================== ADMIN / QUANLY ===================== --%>
     <% if (role == "Admin" || role == "QuanLy") { %>
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card text-white bg-info h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <h2 class="fw-bold"><asp:Label ID="lblTongNhanVien" runat="server" Text="0"></asp:Label></h2>
-                    <p class="mb-0 fs-5">Nhân viên</p>
-                    <i class="fas fa-user position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer bg-info border-0 text-center">
-                    <a href="../Admin/DanhSachNhanVien.aspx" class="text-white text-decoration-none small">Danh sách nhân viên <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-white h-100 border-0 shadow-sm" style="background-color: #6c757d !important;">
-                <div class="card-body">
-                    <h2 class="fw-bold"><asp:Label ID="lblTongPhongBan" runat="server" Text="0"></asp:Label></h2>
-                    <p class="mb-0 fs-5">Phòng ban</p>
-                    <i class="fas fa-university position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer border-0 text-center" style="background-color: #5a6268;">
-                    <a href="../Admin/DanhSachPhongBan.aspx" class="text-white text-decoration-none small">Danh sách phòng ban <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-white h-100 border-0 shadow-sm" style="background-color: #8e44ad !important;">
-                <div class="card-body">
-                    <h2 class="fw-bold"><asp:Label ID="lblTongTaiKhoan" runat="server" Text="0"></asp:Label></h2>
-                    <p class="mb-0 fs-5">Tài khoản người dùng</p>
-                    <i class="fas fa-user-plus position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer border-0 text-center" style="background-color: #7d3c98;">
-                    <a href="../Admin/DanhSachTaiKhoan.aspx" class="text-white text-decoration-none small">Danh sách tài khoản <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-danger h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <h2 class="fw-bold"><asp:Label ID="lblNVNghiViec" runat="server" Text="0"></asp:Label></h2>
-                    <p class="mb-0 fs-5">Nhân viên nghỉ việc</p>
-                    <i class="fas fa-chart-pie position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer bg-danger border-0 text-center">
-                    <a href="../Admin/DanhSachNhanVien.aspx" class="text-white text-decoration-none small">Danh sách nghỉ việc <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="content-body">
 
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <div class="card text-white bg-success h-100 border-0 shadow-sm" style="background-color: #27ae60 !important;">
-                <div class="card-body pb-1">
-                    <h4 class="fw-bold mb-1">EXCEL</h4>
-                    <p class="fs-5">Xuất báo cáo</p>
-                    <i class="fas fa-file-excel position-absolute" style="font-size: 4rem; right: 20px; top: 20px; opacity: 0.3;"></i>
+        <%-- Hàng thống kê --%>
+        <div class="row g-3 mb-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="dash-card dc-info h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1"><i class="fas fa-users me-1"></i>Tổng nhân viên</p>
+                        <h2 class="dc-number"><asp:Label ID="lblTongNhanVien" runat="server" Text="0"></asp:Label></h2>
+                    </div>
+                    <i class="fas fa-user dc-icon"></i>
+                    <a href="../Admin/DanhSachNhanVien.aspx" class="dc-footer">
+                        Danh sách nhân viên <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
                 </div>
-                <div class="card-footer border-0" style="background-color: #229954;">
-                    <asp:LinkButton ID="btnXuatExcelNhanVien" runat="server" CssClass="text-white text-decoration-none w-100 d-block small" OnClick="btnXuatExcelNhanVien_Click">
-                        Danh sách nhân viên <i class="fas fa-arrow-circle-right float-end mt-1"></i>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="dash-card dc-gray h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1"><i class="fas fa-building me-1"></i>Phòng ban</p>
+                        <h2 class="dc-number"><asp:Label ID="lblTongPhongBan" runat="server" Text="0"></asp:Label></h2>
+                    </div>
+                    <i class="fas fa-university dc-icon"></i>
+                    <a href="../Admin/DanhSachPhongBan.aspx" class="dc-footer">
+                        Danh sách phòng ban <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="dash-card dc-purple h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1"><i class="fas fa-id-card me-1"></i>Tài khoản</p>
+                        <h2 class="dc-number"><asp:Label ID="lblTongTaiKhoan" runat="server" Text="0"></asp:Label></h2>
+                    </div>
+                    <i class="fas fa-user-plus dc-icon"></i>
+                    <a href="../Admin/DanhSachTaiKhoan.aspx" class="dc-footer">
+                        Danh sách tài khoản <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="dash-card dc-danger h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1"><i class="fas fa-user-minus me-1"></i>Nghỉ việc</p>
+                        <h2 class="dc-number"><asp:Label ID="lblNVNghiViec" runat="server" Text="0"></asp:Label></h2>
+                    </div>
+                    <i class="fas fa-chart-pie dc-icon"></i>
+                    <a href="../Admin/DanhSachNhanVien.aspx" class="dc-footer">
+                        Danh sách nghỉ việc <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <%-- Xuất Excel --%>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="dash-card dc-excel h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1" style="font-size:11px; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Xuất báo cáo</p>
+                        <h4 class="dc-number" style="font-size:26px; letter-spacing:0;">
+                            <i class="fas fa-file-excel me-2" style="font-size:22px;"></i>Danh sách nhân viên
+                        </h4>
+                    </div>
+                    <i class="fas fa-file-excel dc-icon" style="font-size:80px;"></i>
+                    <asp:LinkButton ID="btnXuatExcelNhanVien" runat="server"
+                        CssClass="dc-footer text-decoration-none"
+                        OnClick="btnXuatExcelNhanVien_Click">
+                        Tải xuống Excel <i class="fas fa-download ms-1"></i>
+                    </asp:LinkButton>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="dash-card dc-teal h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1" style="font-size:11px; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Xuất báo cáo</p>
+                        <h4 class="dc-number" style="font-size:26px; letter-spacing:0;">
+                            <i class="fas fa-file-invoice-dollar me-2" style="font-size:22px;"></i>Bảng lương nhân viên
+                        </h4>
+                    </div>
+                    <i class="fas fa-file-invoice-dollar dc-icon" style="font-size:80px;"></i>
+                    <asp:LinkButton ID="btnXuatExcelLuong" runat="server"
+                        CssClass="dc-footer text-decoration-none"
+                        OnClick="btnXuatExcelLuong_Click">
+                        Tải xuống Excel <i class="fas fa-download ms-1"></i>
                     </asp:LinkButton>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6 mb-3">
-            <div class="card text-white bg-success h-100 border-0 shadow-sm" style="background-color: #27ae60 !important;">
-                <div class="card-body pb-1">
-                    <h4 class="fw-bold mb-1">EXCEL</h4>
-                    <p class="fs-5">Xuất báo cáo</p>
-                    <i class="fas fa-file-excel position-absolute" style="font-size: 4rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer border-0" style="background-color: #229954;">
-                    <asp:LinkButton ID="btnXuatExcelLuong" runat="server" CssClass="text-white text-decoration-none w-100 d-block small" OnClick="btnXuatExcelLuong_Click">
-                        Lương nhân viên <i class="fas fa-arrow-circle-right float-end mt-1"></i>
-                    </asp:LinkButton>
-                </div>
-            </div>
-        </div>
     </div>
     <% } %>
 
+    <%-- ===================== NHÂN VIÊN ===================== --%>
     <% if (role == "NhanVien") { %>
-    <div class="col-12 mb-3">
-        <h4 class="fw-bold">Xin chào, <asp:Label ID="lblWelcomeName" runat="server" Text="" />!</h4>
-    </div>
-    <div class="row mb-4">
-        <!-- Card 1: Phong ban (Blue/bg-info) -->
-        <div class="col-md-3 mb-3">
-            <div class="card text-white bg-info h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <h2 class="fw-bold fs-3"><asp:Label ID="lblEmpPhongBan" runat="server" Text="Chưa xếp phòng" /></h2>
-                    <p class="mb-0 fs-5">Phòng ban</p>
-                    <i class="fas fa-university position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer bg-info border-0 text-center">
-                    <a href="../NhanVien/HoSoCaNhan.aspx" class="text-white text-decoration-none small">Xem chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+    <div class="content-body">
+
+        <div class="col-12 mb-3">
+            <h4 class="fw-bold mb-0" style="color:#1e293b;">
+                Xin chào, <span style="color:#3b82f6;"><asp:Label ID="lblWelcomeName" runat="server" Text="" /></span>! 👋
+            </h4>
+            <p class="text-muted mb-0" style="font-size:13px;">Đây là tổng quan tài khoản của bạn</p>
+        </div>
+
+        <%-- Row 1: 4 thẻ thông tin --%>
+        <div class="row g-3 mb-3">
+            <div class="col-md-3 col-sm-6">
+                <div class="dash-card dc-info h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1">Phòng ban</p>
+                        <h3 class="dc-number" style="font-size:22px; letter-spacing:0;">
+                            <asp:Label ID="lblEmpPhongBan" runat="server" Text="Chưa xếp phòng" />
+                        </h3>
+                    </div>
+                    <i class="fas fa-university dc-icon"></i>
+                    <a href="../NhanVien/HoSoCaNhan.aspx" class="dc-footer">
+                        Xem chi tiết <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
                 </div>
             </div>
-        </div>
-        <!-- Card 2: Chuc vu (Purple/#8e44ad) -->
-        <div class="col-md-3 mb-3">
-            <div class="card text-white h-100 border-0 shadow-sm" style="background-color: #8e44ad !important;">
-                <div class="card-body">
-                    <h2 class="fw-bold fs-3"><asp:Label ID="lblEmpChucVu" runat="server" Text="Nhân viên" /></h2>
-                    <p class="mb-0 fs-5">Chức vụ</p>
-                    <i class="fas fa-briefcase position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer border-0 text-center" style="background-color: #7d3c98;">
-                    <a href="../NhanVien/HoSoCaNhan.aspx" class="text-white text-decoration-none small">Xem chi tiết <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <!-- Card 3: Trang thai (Grey/#6c757d) -->
-        <div class="col-md-3 mb-3">
-            <div class="card text-white h-100 border-0 shadow-sm" style="background-color: #6c757d !important;">
-                <div class="card-body">
-                    <h2 class="fw-bold fs-3"><asp:Label ID="lblEmpTrangThai" runat="server" Text="Đang làm" /></h2>
-                    <p class="mb-0 fs-5">Trạng thái làm việc</p>
-                    <i class="fas fa-info-circle position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer border-0 text-center" style="background-color: #5a6268;">
-                    <a href="../NhanVien/HoSoCaNhan.aspx" class="text-white text-decoration-none small">Xem chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+            <div class="col-md-3 col-sm-6">
+                <div class="dash-card dc-purple h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1">Chức vụ</p>
+                        <h3 class="dc-number" style="font-size:22px; letter-spacing:0;">
+                            <asp:Label ID="lblEmpChucVu" runat="server" Text="Nhân viên" />
+                        </h3>
+                    </div>
+                    <i class="fas fa-briefcase dc-icon"></i>
+                    <a href="../NhanVien/HoSoCaNhan.aspx" class="dc-footer">
+                        Xem chi tiết <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
                 </div>
             </div>
-        </div>
-        <!-- Card 4: Luong ky gan nhat (Red/bg-danger) -->
-        <div class="col-md-3 mb-3">
-            <div class="card text-white bg-danger h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <h2 class="fw-bold fs-3"><asp:Label ID="lblEmpLuongStatus" runat="server" Text="Chưa nhận" /></h2>
-                    <p class="mb-0 fs-5">Lương kỳ gần nhất</p>
-                    <i class="fas fa-money-bill-wave position-absolute" style="font-size: 3rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer bg-danger border-0 text-center">
-                    <a href="../NhanVien/BangLuongCaNhan.aspx" class="text-white text-decoration-none small">Xem bảng lương <i class="fas fa-arrow-circle-right"></i></a>
+            <div class="col-md-3 col-sm-6">
+                <div class="dash-card dc-gray h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1">Trạng thái làm việc</p>
+                        <h3 class="dc-number" style="font-size:22px; letter-spacing:0;">
+                            <asp:Label ID="lblEmpTrangThai" runat="server" Text="Đang làm" />
+                        </h3>
+                    </div>
+                    <i class="fas fa-info-circle dc-icon"></i>
+                    <a href="../NhanVien/HoSoCaNhan.aspx" class="dc-footer">
+                        Xem chi tiết <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <div class="card text-white bg-success h-100 border-0 shadow-sm" style="background-color: #27ae60 !important;">
-                <div class="card-body pb-1">
-                    <h4 class="fw-bold mb-1">HỒ SƠ</h4>
-                    <p class="fs-5">Thông tin cá nhân</p>
-                    <i class="fas fa-user-circle position-absolute" style="font-size: 4rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer border-0" style="background-color: #229954;">
-                    <a href="../NhanVien/HoSoCaNhan.aspx" class="text-white text-decoration-none w-100 d-block small">
-                        Xem hồ sơ cá nhân <i class="fas fa-arrow-circle-right float-end mt-1"></i>
+            <div class="col-md-3 col-sm-6">
+                <div class="dash-card dc-danger h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1">Lương kỳ gần nhất</p>
+                        <h3 class="dc-number" style="font-size:22px; letter-spacing:0;">
+                            <asp:Label ID="lblEmpLuongStatus" runat="server" Text="Chưa nhận" />
+                        </h3>
+                    </div>
+                    <i class="fas fa-money-bill-wave dc-icon"></i>
+                    <a href="../NhanVien/BangLuongCaNhan.aspx" class="dc-footer">
+                        Xem bảng lương <i class="fas fa-arrow-right ms-1"></i>
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-3">
-            <div class="card text-white bg-success h-100 border-0 shadow-sm" style="background-color: #27ae60 !important;">
-                <div class="card-body pb-1">
-                    <h4 class="fw-bold mb-1">THU NHẬP</h4>
-                    <p class="fs-5">Xem lịch sử lương</p>
-                    <i class="fas fa-money-bill-wave position-absolute" style="font-size: 4rem; right: 20px; top: 20px; opacity: 0.3;"></i>
+        <%-- Row 2: 3 thẻ hành động --%>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="dash-card dc-success h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1" style="font-size:11px; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Tài liệu cá nhân</p>
+                        <h4 class="dc-number" style="font-size:22px; letter-spacing:0;">
+                            <i class="fas fa-user-circle me-2" style="font-size:18px;"></i>Hồ Sơ
+                        </h4>
+                        <p class="dc-label" style="font-size:12px;">Thông tin cá nhân đầy đủ</p>
+                    </div>
+                    <i class="fas fa-user-circle dc-icon" style="font-size:80px;"></i>
+                    <a href="../NhanVien/HoSoCaNhan.aspx" class="dc-footer">
+                        Xem hồ sơ cá nhân <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
                 </div>
-                <div class="card-footer border-0" style="background-color: #229954;">
-                    <a href="../NhanVien/BangLuongCaNhan.aspx" class="text-white text-decoration-none w-100 d-block small">
-                        Xem bảng lương của tôi <i class="fas fa-arrow-circle-right float-end mt-1"></i>
+            </div>
+            <div class="col-md-4">
+                <div class="dash-card dc-teal h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1" style="font-size:11px; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Thu nhập</p>
+                        <h4 class="dc-number" style="font-size:22px; letter-spacing:0;">
+                            <i class="fas fa-money-bill-wave me-2" style="font-size:18px;"></i>Bảng Lương
+                        </h4>
+                        <p class="dc-label" style="font-size:12px;">Xem lịch sử lương tháng</p>
+                    </div>
+                    <i class="fas fa-wallet dc-icon" style="font-size:80px;"></i>
+                    <a href="../NhanVien/BangLuongCaNhan.aspx" class="dc-footer">
+                        Xem bảng lương của tôi <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dash-card dc-amber h-100">
+                    <div class="dc-body">
+                        <p class="dc-label mb-1" style="font-size:11px; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Đăng ký</p>
+                        <h4 class="dc-number" style="font-size:22px; letter-spacing:0;">
+                            <i class="fas fa-calendar-times me-2" style="font-size:18px;"></i>Nghỉ Phép
+                        </h4>
+                        <p class="dc-label" style="font-size:12px;">Tạo đơn xin nghỉ phép</p>
+                    </div>
+                    <i class="fas fa-envelope-open-text dc-icon" style="font-size:80px;"></i>
+                    <a href="../Common/HopThuNghiPhep.aspx" class="dc-footer">
+                        Gửi đơn xin nghỉ phép <i class="fas fa-arrow-right ms-1"></i>
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-3">
-            <div class="card text-white bg-success h-100 border-0 shadow-sm" style="background-color: #27ae60 !important;">
-                <div class="card-body pb-1">
-                    <h4 class="fw-bold mb-1">NGHỈ PHÉP</h4>
-                    <p class="fs-5">Tạo đơn nghỉ phép</p>
-                    <i class="fas fa-envelope-open-text position-absolute" style="font-size: 4rem; right: 20px; top: 20px; opacity: 0.3;"></i>
-                </div>
-                <div class="card-footer border-0" style="background-color: #229954;">
-                    <a href="../Common/HopThuNghiPhep.aspx" class="text-white text-decoration-none w-100 d-block small">
-                        Gửi đơn xin nghỉ phép <i class="fas fa-arrow-circle-right float-end mt-1"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
     <% } %>
 </asp:Content>

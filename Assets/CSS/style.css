@@ -1,4 +1,4 @@
-﻿/* Reset & Layout cơ bản */
+/* Reset & Layout cơ bản */
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -9,36 +9,40 @@ body {
     display: flex;
     height: 100vh;
     overflow: hidden;
+    background-color: inherit;
 }
 
 /* Sidebar (Menu trái) */
 .sidebar {
     width: 250px;
-    background-color: #222d32;
-    color: #b8c7ce;
+    background: linear-gradient(180deg, #1e282c 0%, #0f171a 100%);
+    color: #cbd5e1;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
 }
 
 .sidebar-brand {
-    background-color: #367fa9;
+    background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
     color: white;
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: 1px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .sidebar-user {
-    padding: 15px;
+    padding: 20px 15px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #1a2226;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
     .sidebar-user img {
@@ -46,18 +50,24 @@ body {
         height: 45px;
         border-radius: 50%;
         margin-right: 15px;
-        background: white;
+        background: rgba(255,255,255,0.1);
+        border: 2px solid #3b82f6;
+        padding: 2px;
     }
 
     .sidebar-user .info p {
         margin: 0;
-        color: white;
+        color: #f8fafc;
         font-weight: 600;
+        font-size: 14px;
     }
 
     .sidebar-user .info small {
-        color: #28a745;
-        font-size: 12px;
+        color: #10b981;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
 
 .sidebar-search {
@@ -66,13 +76,46 @@ body {
 
     .sidebar-search input {
         width: 100%;
-        padding: 8px 10px;
-        border-radius: 3px;
-        border: none;
-        background-color: #374850;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background-color: rgba(255,255,255,0.05);
         color: white;
         outline: none;
+        font-size: 13px;
+        transition: all 0.2s;
     }
+    
+    .sidebar-search input:focus {
+        border-color: #3b82f6;
+        background-color: rgba(255,255,255,0.1);
+    }
+
+    .sidebar-search-box {
+        position: relative;
+    }
+
+        .sidebar-search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 13px;
+            pointer-events: none;
+        }
+
+        .sidebar-search-box input {
+            padding-left: 32px;
+        }
+
+/* Sidebar thu gọn */
+.wrapper.sidebar-collapsed .sidebar {
+    width: 0;
+    min-width: 0;
+    opacity: 0;
+    box-shadow: none;
+}
 
 .sidebar-menu {
     list-style: none;
@@ -81,32 +124,47 @@ body {
 }
 
     .sidebar-menu li.header {
-        padding: 10px 15px;
-        font-size: 12px;
-        color: #4b646f;
-        background: #1a2226;
+        padding: 15px 15px 5px 15px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
         text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     .sidebar-menu li a {
         display: flex;
         align-items: center;
-        padding: 12px 15px;
-        color: #b8c7ce;
+        padding: 12px 20px;
+        color: #94a3b8;
         text-decoration: none;
-        border-left: 3px solid transparent;
-        transition: 0.2s;
+        border-left: 4px solid transparent;
+        transition: all 0.2s ease;
+        font-size: 14px;
+        font-weight: 500;
     }
 
         .sidebar-menu li a i {
-            width: 30px;
+            width: 25px;
             font-size: 16px;
+            transition: transform 0.2s;
         }
 
-        .sidebar-menu li a:hover, .sidebar-menu li.active a {
-            background-color: #1e282c;
-            color: white;
-            border-left-color: #3c8dbc;
+        .sidebar-menu li a:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #f8fafc;
+            border-left-color: #3b82f6;
+        }
+        
+        .sidebar-menu li a:hover i {
+            transform: scale(1.15);
+        }
+
+        .sidebar-menu li.active a {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border-left-color: #3b82f6;
+            font-weight: 600;
         }
 
 /* Main Content (Vùng nội dung phải) */
@@ -119,146 +177,226 @@ body {
 
 .top-navbar {
     height: 50px;
-    background-color: #3c8dbc;
+    background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
     color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 0 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     z-index: 10;
 }
 
     .top-navbar .nav-right a {
         color: white;
-        margin-left: 15px;
+        margin-left: 20px;
         text-decoration: none;
+        transition: opacity 0.2s;
+    }
+    .top-navbar .nav-right a:hover {
+        opacity: 0.8;
     }
 
 .content-header {
-    padding: 15px 20px 0 20px;
+    padding: 18px 25px 15px 25px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    margin-bottom: 4px;
 }
 
-    .content-header h2 {
+    .content-header h2, .content-header h3 {
         margin: 0;
-        font-size: 24px;
-        color: #333;
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        letter-spacing: -0.3px;
     }
 
     .content-header small {
-        color: #777;
-        font-size: 14px;
+        color: #94a3b8;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
     }
 
 .content-body {
-    padding: 20px;
+    padding: 24px 25px;
 }
 
-/* Dashboard Cards (Thẻ thống kê) */
+/* ======= Dashboard Cards (Thẻ thống kê) ======= */
+.dash-card {
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    transition: transform 0.25s cubic-bezier(.22,.68,0,1.2), box-shadow 0.25s ease;
+    cursor: default;
+}
+.dash-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+}
+/* Lớp noise texture tạo chiều sâu */
+.dash-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+}
+.dash-card .dc-body {
+    padding: 22px 20px 14px 20px;
+    position: relative;
+    z-index: 1;
+}
+.dash-card .dc-icon {
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    font-size: 64px;
+    color: rgba(255,255,255,0.18);
+    transition: transform 0.35s ease, color 0.35s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+.dash-card:hover .dc-icon {
+    transform: scale(1.15) rotate(-8deg);
+    color: rgba(255,255,255,0.28);
+}
+.dash-card .dc-number {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    margin: 0 0 4px 0;
+    letter-spacing: -1px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+.dash-card .dc-label {
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0.88;
+    margin: 0;
+    letter-spacing: 0.2px;
+}
+.dash-card .dc-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 16px;
+    background: rgba(0,0,0,0.18);
+    text-decoration: none;
+    color: rgba(255,255,255,0.92);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: background 0.2s, color 0.2s;
+    position: relative;
+    z-index: 2;
+    gap: 6px;
+}
+.dash-card .dc-footer:hover {
+    background: rgba(0,0,0,0.28);
+    color: #fff;
+}
+/* Màu gradient cho từng loại card */
+.dc-info    { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); }
+.dc-gray    { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
+.dc-purple  { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); }
+.dc-danger  { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); }
+.dc-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+.dc-teal    { background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); }
+.dc-amber   { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+.dc-excel   { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
+
+/* ======= Legacy small-box (giữ lại tương thích) ======= */
 .small-box {
-    border-radius: 3px;
+    border-radius: 12px;
     position: relative;
     display: block;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    margin-bottom: 25px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.06);
     color: white;
     overflow: hidden;
+    transition: transform 0.25s cubic-bezier(.22,.68,0,1.2), box-shadow 0.25s ease;
 }
-
-    .small-box > .inner {
-        padding: 20px;
-    }
-
-    .small-box h3 {
-        font-size: 38px;
-        font-weight: bold;
-        margin: 0 0 5px 0;
-        white-space: nowrap;
-    }
-
-    .small-box p {
-        font-size: 15px;
-        margin: 0;
-    }
-
-    .small-box .icon {
-        position: absolute;
-        top: -10px;
-        right: 10px;
-        z-index: 0;
-        font-size: 90px;
-        color: rgba(0,0,0,0.15);
-        transition: 0.3s;
-    }
-
-    .small-box:hover .icon {
-        font-size: 95px;
-        transform: scale(1.1);
-    }
+.small-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+}
+    .small-box > .inner { padding: 25px; }
+    .small-box h3 { font-size: 32px; font-weight: 800; margin: 0 0 5px 0; white-space: nowrap; }
+    .small-box p  { font-size: 14px; font-weight: 500; margin: 0; opacity: 0.9; }
+    .small-box .icon { position: absolute; top: 5px; right: 15px; z-index: 0; font-size: 72px; color: rgba(255,255,255,0.2); transition: 0.3s; }
+    .small-box:hover .icon { transform: scale(1.1) rotate(5deg); }
 
 .small-box-footer {
-    position: relative;
-    text-align: center;
-    padding: 5px 0;
-    color: rgba(255,255,255,0.8);
-    display: block;
-    z-index: 10;
-    background: rgba(0,0,0,0.1);
-    text-decoration: none;
-    font-size: 13px;
+    position: relative; text-align: center; padding: 8px 0;
+    color: rgba(255,255,255,0.9); display: block; z-index: 10;
+    background: rgba(0,0,0,0.15); text-decoration: none;
+    font-size: 12px; font-weight: 600; transition: background 0.2s;
 }
+    .small-box-footer:hover { color: #fff; background: rgba(0,0,0,0.25); }
 
-    .small-box-footer:hover {
-        color: #fff;
-        background: rgba(0,0,0,0.15);
-    }
+/* Màu sắc Card (legacy) */
+.bg-aqua   { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important; }
+.bg-orange { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important; }
+.bg-yellow { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%) !important; }
+.bg-red    { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important; }
+.bg-green  { background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; }
 
-/* Màu sắc Card */
-.bg-aqua {
-    background-color: #00c0ef !important;
-}
-
-.bg-orange {
-    background-color: #f39c12 !important;
-}
-
-.bg-yellow {
-    background-color: #f39c12 !important;
-}
-/* Tương tự ảnh */
-.bg-red {
-    background-color: #dd4b39 !important;
-}
-
-.bg-green {
-    background-color: #00a65a !important;
-}
-
-/* Bảng dữ liệu (Table) */
+/* ======= Bảng dữ liệu (Table / Box) ======= */
 .box {
     background: #fff;
-    border-top: 3px solid #d2d6de;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-    border-radius: 3px;
-    margin-bottom: 20px;
+    border-top: 3px solid #3b82f6;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border-radius: 14px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
 }
-
+.box:hover {
+    box-shadow: 0 6px 24px rgba(59,130,246,0.12);
+}
 .box-header {
-    padding: 10px 15px;
-    border-bottom: 1px solid #f4f4f4;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #fafbff;
 }
-
     .box-header h3 {
         margin: 0;
-        font-size: 18px;
-        color: #444;
+        font-size: 15px;
+        font-weight: 700;
+        color: #1e293b;
     }
+.box-body { padding: 20px; }
 
-.box-body {
-    padding: 15px;
+/* Card Bootstrap cải thiện */
+.card {
+    border-radius: 14px !important;
+    border: none !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
+    transition: transform 0.22s cubic-bezier(.22,.68,0,1.2), box-shadow 0.22s ease !important;
+    overflow: hidden !important;
+}
+.card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.14) !important;
+}
+.card-body {
+    position: relative;
+}
+.card-footer {
+    transition: background 0.2s !important;
+}
+.card-footer:hover {
+    filter: brightness(0.92) !important;
 }
 
 /* Giao diện Login dùng chung file này */
@@ -271,4 +409,227 @@ body {
 .login-container {
     max-width: 400px;
     margin: 10vh auto;
+}
+
+/* ================= DARK MODE STYLING ================= */
+body.dark-mode {
+    background-color: #12181b !important;
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .main-content {
+    background-color: #12181b !important;
+}
+
+body.dark-mode .top-navbar {
+    background-color: #1e293b !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .content-header {
+    background-color: #1e293b !important;
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .content-header h3,
+body.dark-mode .content-header h2,
+body.dark-mode .content-header h5,
+body.dark-mode .content-header span,
+body.dark-mode .content-header label {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .content-header small {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .box,
+body.dark-mode .card,
+body.dark-mode .card-body,
+body.dark-mode .box-body {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+/* Override bg-white và bg-light bất kể context */
+body.dark-mode .bg-white,
+body.dark-mode .bg-light {
+    background-color: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+/* Panel ASP.NET có bg-light */
+body.dark-mode [class*="bg-light"],
+body.dark-mode [class*="bg-white"] {
+    background-color: #1e293b !important;
+}
+
+body.dark-mode .box-header,
+body.dark-mode .card-header {
+    background-color: #1e293b !important;
+    border-bottom: 1px solid #334155 !important;
+    color: #f8fafc !important;
+}
+
+/* header/footer của GridView được render thành td với BackColor inline */
+body.dark-mode tr th,
+body.dark-mode thead tr th {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .box-header h3,
+body.dark-mode .box-header h5,
+body.dark-mode .card-header h5,
+body.dark-mode .box-header span,
+body.dark-mode .card-header span,
+body.dark-mode .box-header label,
+body.dark-mode .card-header label {
+    color: #60a5fa !important;
+}
+
+body.dark-mode table,
+body.dark-mode .table,
+body.dark-mode .table td,
+body.dark-mode .table th {
+    color: #cbd5e1 !important;
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .table tr:hover,
+body.dark-mode .table tbody tr:hover td {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .table th {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-bottom: 2px solid #334155 !important;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode .input-group-text,
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background-color: #0f172a !important;
+    border-color: #475569 !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .form-control::placeholder,
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #64748b !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus,
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .modal-content {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .bg-light {
+    background-color: #0f172a !important;
+}
+
+body.dark-mode .text-muted,
+body.dark-mode .text-muted span,
+body.dark-mode .text-muted small {
+    color: #94a3b8 !important;
+}
+
+/* Khắc phục chữ nhạt trong các ô tiêu đề, label của form */
+body.dark-mode label,
+body.dark-mode .form-label,
+body.dark-mode legend {
+    color: #cbd5e1 !important;
+    font-weight: 500 !important;
+}
+
+/* Các nhãn highlight, tiêu đề phụ */
+body.dark-mode .text-primary,
+body.dark-mode .box-header h5,
+body.dark-mode .card-header h5,
+body.dark-mode h5.text-primary {
+    color: #60a5fa !important;
+}
+
+body.dark-mode .text-secondary {
+    color: #cbd5e1 !important;
+}
+
+/* ================= TOAST UX OVERRIDES ================= */
+.toast-container {
+    margin-top: 15px;
+    margin-right: 15px;
+}
+.toast {
+    backdrop-filter: blur(10px);
+    border-radius: 8px !important;
+}
+
+/* ================= DARK MODE: dash-card & card Bootstrap ================= */
+/* dash-card không cần override vì nó dùng gradient cố định — chỉ cần footer */
+body.dark-mode .dash-card .dc-footer {
+    background: rgba(0,0,0,0.25) !important;
+    color: rgba(255,255,255,0.9) !important;
+}
+body.dark-mode .dash-card .dc-footer:hover {
+    background: rgba(0,0,0,0.38) !important;
+    color: #fff !important;
+}
+
+/* card Bootstrap trong dark mode */
+body.dark-mode .card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.25) !important;
+}
+body.dark-mode .card-footer {
+    background-color: rgba(255,255,255,0.04) !important;
+    border-top-color: #334155 !important;
+}
+
+/* box trong dark mode */
+body.dark-mode .box {
+    background-color: #1e293b !important;
+    border-top-color: #3b82f6 !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
+}
+body.dark-mode .box-header {
+    background: #0f172a !important;
+    border-bottom-color: #334155 !important;
+}
+
+/* content-header dark override */
+body.dark-mode .content-header {
+    border-bottom-color: #334155 !important;
+}
+body.dark-mode .content-header h2,
+body.dark-mode .content-header h3 {
+    color: #f8fafc !important;
+}
+
+/* Welcome text NV */
+body.dark-mode .fw-bold[style*="color:#1e293b"] {
+    color: #f1f5f9 !important;
 }

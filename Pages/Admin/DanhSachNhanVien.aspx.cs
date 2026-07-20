@@ -158,12 +158,12 @@ namespace QLNhanVien
                         cmd.ExecuteNonQuery();
                         trans.Commit();
                         LoadDanhSachNhanVien(txtSearch.Text);
-                        ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Xóa thành công!');", true);
+                        ShowMsg("Xóa nhân viên thành công!", true);
                     }
                     catch (Exception ex)
                     {
                         trans.Rollback();
-                        ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Lỗi khi xóa: {ex.Message}');", true);
+                        ShowMsg("Lỗi khi xóa: " + ex.Message, false);
                     }
                 }
             }
@@ -211,7 +211,7 @@ namespace QLNhanVien
             string errorMsg = "";
             if (!ValidateForm(out errorMsg))
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('{errorMsg.Replace("'", "\\'")}');", true);
+                ShowMsg(errorMsg, false);
                 return;
             }
 
@@ -299,7 +299,7 @@ namespace QLNhanVien
                     catch (Exception ex)
                     {
                         trans.Rollback();
-                        ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Lỗi: {ex.Message.Replace("'", "")}');", true);
+                        ShowMsg("Lỗi lưu dữ liệu: " + ex.Message, false);
                     }
                 }
             }
@@ -417,6 +417,13 @@ namespace QLNhanVien
             }
 
             return true;
+        }
+
+        private void ShowMsg(string msg, bool ok)
+        {
+            string type = ok ? "success" : "error";
+            string escapedMsg = msg.Replace("'", "\\'").Replace("\r", "").Replace("\n", " ");
+            ClientScript.RegisterStartupScript(this.GetType(), "toastMsg", $"window.showToast('{escapedMsg}', '{type}');", true);
         }
     }
 }

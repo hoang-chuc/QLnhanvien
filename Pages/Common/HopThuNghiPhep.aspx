@@ -6,6 +6,7 @@
     </div>
 
     <div class="content-body">
+        <asp:Label ID="lblMsg" runat="server" CssClass="mb-2 d-block" />
         <asp:MultiView ID="mvHopThu" runat="server">
             
             <asp:View ID="vNhanVien" runat="server">

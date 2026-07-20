@@ -130,6 +130,39 @@ Mở file `Web.config`, chỉnh sửa chuỗi kết nối:
 
 ---
 
+## 🧰 Script tiện ích (Batch)
+
+Hai file `.bat` ở thư mục gốc giúp khởi động và kiểm tra tự động:
+
+### `KHOI_DONG_HE_THONG.bat` — Khởi động hệ thống
+
+Tự động: (1) kiểm tra/khởi động SQL Server Express → (2) build project bằng MSBuild →
+(3) kiểm tra/khởi động IIS trên cổng 8080 → (4) mở trình duyệt vào trang đăng nhập.
+
+```bash
+# Chạy bằng quyền bình thường (không cần Admin trừ khi IIS chưa bật)
+KHOI_DONG_HE_THONG.bat
+```
+
+> Yêu cầu: Visual Studio 2022 (Enterprise/Community/BuildTools) đã cài đặt để có MSBuild,
+> SQL Server Express (`MSSQL$SQLEXPRESS`) và IIS đã cấu hình website `QLNhanVien` trên cổng 8080.
+
+### `CHAY_KIEM_TRA_TU_DONG.bat` — Chạy kiểm tra tự động (Playwright)
+
+Kiểm tra server đang chạy, cài đặt thư viện Playwright (lần đầu), sau đó cho phép chọn chế độ:
+
+```bash
+CHAY_KIEM_TRA_TU_DONG.bat
+```
+
+- Chọn `1`: Chạy tất cả test (ẩn trình duyệt)
+- Chọn `2`: Chạy tất cả test (hiển thị trình duyệt)
+- Chọn `3`: Chạy 1 file test cụ thể (01–12)
+
+> Phải chạy `KHOI_DONG_HE_THONG.bat` trước để server hoạt động.
+
+---
+
 ## 🧪 Chạy Test
 
 ### Cài đặt
@@ -216,8 +249,11 @@ npx playwright test --headed
 
 ### 12. Site.Master - Menu & Navigation
 - Sidebar menu phân quyền theo vai trò
+- Ô tìm kiếm menu (lọc realtime theo tên chức năng)
+- Nút thu gọn/mở rộng sidebar (hamburger)
+- Chế độ sáng/tối (Dark mode)
+- Icon hộp thư nghỉ phép kèm badge số đơn chờ duyệt
 - Nút đăng xuất
-- Icon hộp thư nghỉ phép
 
 ---
 

@@ -83,9 +83,10 @@ namespace QLNhanVien
                 }
                 catch (Exception ex)
                 {
-                    // BẢO MẬT: Escape message để tránh XSS
-                    string safeMsg = ex.Message.Replace("'", "\\'").Replace("</script>", "");
-                    Response.Write("<script>alert('Lỗi tải dữ liệu: " + safeMsg + "');</script>");
+                    string safeMsg = System.Web.HttpUtility.HtmlEncode(ex.Message);
+                    ClientScript.RegisterStartupScript(this.GetType(), "err",
+                        $"var el=document.createElement('div');el.className='alert alert-danger alert-dismissible fade show';el.innerHTML='<i class=\'fas fa-exclamation-triangle me-2\'></i>Lỗi tải thông tin cá nhân. Vui lòng tải lại trang.<button type=\'button\' class=\'btn-close\' data-bs-dismiss=\'alert\'></button>';document.querySelector('.content-body')?.prepend(el);",
+                        true);
                 }
             }
         }
