@@ -80,7 +80,12 @@ namespace QLNhanVien
                 string sqlNghiPhep = @"
                     SELECT TrangThai, COUNT(MaDon) AS SoLuong 
                     FROM NghiPhep 
-                    GROUP BY TrangThai";
+                    GROUP BY TrangThai
+                    ORDER BY CASE TrangThai 
+                        WHEN N'Chờ duyệt' THEN 1 
+                        WHEN N'Đã duyệt' THEN 2 
+                        WHEN N'Từ chối' THEN 3 
+                        ELSE 4 END";
 
                 SqlCommand cmdNP = new SqlCommand(sqlNghiPhep, conn);
                 SqlDataReader drNP = cmdNP.ExecuteReader();

@@ -14,7 +14,7 @@
                     <h5 class="fw-bold text-dark"><i class="fas fa-users me-2 text-info"></i>Phân bổ lao động theo phòng ban</h5>
                 </div>
                 <div class="card-body d-flex justify-content-center">
-                    <div style="width: 80%; max-width: 400px;">
+                    <div style="position: relative; width: 100%; max-width: 400px; height: 320px;">
                         <canvas id="chartNhanVien"></canvas>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                     <h5 class="fw-bold text-dark"><i class="fas fa-envelope-open-text me-2 text-warning"></i>Trạng thái duyệt nghỉ phép</h5>
                 </div>
                 <div class="card-body d-flex justify-content-center">
-                    <div style="width: 80%; max-width: 400px;">
+                    <div style="position: relative; width: 100%; max-width: 400px; height: 320px;">
                         <canvas id="chartNghiPhep"></canvas>
                     </div>
                 </div>
