@@ -3,6 +3,8 @@
 > Đề tài thực tập: Quản lý nhân sự tại công ty  
 > Công nghệ: ASP.NET Web Forms + SQL Server + Chart.js
 
+📖 **[Hướng dẫn sử dụng chi tiết (dành cho người dùng)](HUONG_DAN_SU_DUNG.md)**
+
 ---
 
 ## 📋 Tổng quan

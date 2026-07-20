@@ -144,22 +144,6 @@
                                             <%= pending %>
                                         </span>
                                     <% } 
-                                }
-                            %>
-                        </a>
-                        <a href="#" id="darkModeToggle" class="me-3 text-white" title="Chuyển chế độ sáng/tối">
-                            <i class="fas fa-moon"></i>
-                        </a>
-                        <div class="user-dropdown d-flex align-items-center">
-                            <asp:LinkButton ID="btnLogout" runat="server" OnClick="btnLogout_Click" CssClass="text-white text-decoration-none ms-3">
-                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                            </asp:LinkButton>
-                        </div>
-                    </div>
-                </header>
-
-                <!-- Toast Container for UX Notifications -->
-                <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
 
                 <div class="p-3">
                     <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
