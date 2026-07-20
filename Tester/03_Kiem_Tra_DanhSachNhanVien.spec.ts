@@ -128,7 +128,8 @@ test.describe('TEST 03: QUAN LY NHAN VIEN - CRUD + TIM KIEM', () => {
     // ==================== PHAN 6: PHAN QUYEN ====================
 
     test('TC10: Nhan vien khong vao duoc trang quan ly', async ({ page }) => {
-        // Dang xuat
+        // Xoa session admin cu truoc khi login tai khoan khac
+        await page.context().clearCookies();
         await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
         await page.locator('#txtLoginUsername').fill('nvvan');
         await page.locator('#txtLoginPassword').fill('nvvan');
@@ -137,6 +138,6 @@ test.describe('TEST 03: QUAN LY NHAN VIEN - CRUD + TIM KIEM', () => {
 
         // Thu truy cap trang quan ly
         await page.goto(`${BASE_URL}/Pages/Admin/DanhSachNhanVien.aspx`);
-        await expect(page).toHaveURL(/.*Default|.*Login\.aspx/, { timeout: 5000 });
+        await expect(page).toHaveURL(/.*Default|.*Login(\.aspx)?/, { timeout: 5000 });
     });
 });

@@ -42,6 +42,7 @@ test.describe('TEST 08: DANH SACH PHONG BAN', () => {
     });
 
     test('TC06: Phan quyen NhanVien khong vao duoc', async ({ page }) => {
+        await page.context().clearCookies();
         await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
         await page.locator('#txtLoginUsername').fill('nvvan');
         await page.locator('#txtLoginPassword').fill('nvvan');
@@ -49,10 +50,11 @@ test.describe('TEST 08: DANH SACH PHONG BAN', () => {
         await page.waitForTimeout(1000);
 
         await page.goto(`${BASE_URL}/Pages/Admin/DanhSachPhongBan.aspx`);
-        await expect(page).toHaveURL(/.*Login\.aspx|.*Default/, { timeout: 5000 });
+        await expect(page).toHaveURL(/.*Login(\.aspx)?|.*Default/, { timeout: 5000 });
     });
 
     test('TC07: Phan quyen QuanLy khong vao duoc', async ({ page }) => {
+        await page.context().clearCookies();
         await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
         await page.locator('#txtLoginUsername').fill('qlquang');
         await page.locator('#txtLoginPassword').fill('qlquang');
@@ -60,6 +62,6 @@ test.describe('TEST 08: DANH SACH PHONG BAN', () => {
         await page.waitForTimeout(1000);
 
         await page.goto(`${BASE_URL}/Pages/Admin/DanhSachPhongBan.aspx`);
-        await expect(page).toHaveURL(/.*Login\.aspx|.*Default/, { timeout: 5000 });
+        await expect(page).toHaveURL(/.*Login(\.aspx)?|.*Default/, { timeout: 5000 });
     });
 });

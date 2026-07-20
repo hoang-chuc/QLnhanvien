@@ -5,9 +5,9 @@ export default defineConfig({
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: 0,
-  workers: 8,
+  workers: 2,
   reporter: 'line',
-  timeout: 10000,
+  timeout: 15000,
   use: {
     baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',

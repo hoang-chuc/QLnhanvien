@@ -46,7 +46,7 @@ test.describe('TEST 06: HOP THU NGHI PHEP', () => {
             await page.locator('#MainContent_txtLyDo').fill('Test loi ngay');
 
             page.on('dialog', async dialog => {
-                expect(dialog.message()).toContain('ngày kết thúc');
+                expect(dialog.message()).toContain('Ngày kết thúc');
                 await dialog.accept();
             });
             await page.locator('#MainContent_btnGuiDon').click();

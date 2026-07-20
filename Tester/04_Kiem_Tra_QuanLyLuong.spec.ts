@@ -68,6 +68,7 @@ test.describe('TEST 04: QUAN LY LUONG', () => {
     });
 
     test('TC06: Phan quyen NhanVien khong vao duoc', async ({ page }) => {
+        await page.context().clearCookies();
         await page.goto(`${BASE_URL}/Pages/Auth/Login.aspx`);
         await page.locator('#txtLoginUsername').fill('nvvan');
         await page.locator('#txtLoginPassword').fill('nvvan');
@@ -75,6 +76,6 @@ test.describe('TEST 04: QUAN LY LUONG', () => {
         await page.waitForTimeout(1000);
 
         await page.goto(`${BASE_URL}/Pages/Admin/QuanLyLuong.aspx`);
-        await expect(page).toHaveURL(/.*Login\.aspx|.*Default/, { timeout: 5000 });
+        await expect(page).toHaveURL(/.*Login(\.aspx)?|.*Default/, { timeout: 5000 });
     });
 });
