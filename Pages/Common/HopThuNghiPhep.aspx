@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Hộp thư nghỉ phép" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="HopThuNghiPhep.aspx.cs" Inherits="QLNhanVien.HopThuNghiPhep" %>
+<%@ Page Title="Hộp thư nghỉ phép" Language="C#" MasterPageFile="~/MasterPages/Site.Master" AutoEventWireup="true" CodeBehind="HopThuNghiPhep.aspx.cs" Inherits="QLNhanVien.HopThuNghiPhep" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="content-header d-flex justify-content-between align-items-center mb-3 bg-light p-2 border-bottom">
@@ -29,6 +29,37 @@
                         <div class="text-end">
                             <asp:Button ID="btnGuiDon" runat="server" Text="Gửi cho Quản lý" CssClass="btn btn-primary" OnClick="btnGuiDon_Click" />
                         </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 mt-4" style="max-width: 800px; margin: 0 auto;">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0 text-secondary"><i class="fas fa-history me-2"></i>Lịch sử xin nghỉ phép</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <asp:GridView ID="gvLichSuNghiPhep" runat="server" CssClass="table table-hover align-middle mb-0" AutoGenerateColumns="False" GridLines="None">
+                            <HeaderStyle CssClass="table-light" />
+                            <Columns>
+                                <asp:TemplateField HeaderText="Thời gian nghỉ">
+                                    <ItemTemplate>
+                                        Từ <%# Convert.ToDateTime(Eval("NgayBatDau")).ToString("dd/MM/yyyy") %> đến <%# Convert.ToDateTime(Eval("NgayKetThuc")).ToString("dd/MM/yyyy") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:BoundField DataField="SoNgay" HeaderText="Số ngày" />
+                                <asp:BoundField DataField="LyDo" HeaderText="Lý do" />
+                                <asp:TemplateField HeaderText="Trạng thái">
+                                    <ItemTemplate>
+                                        <span class='badge <%# Eval("TrangThai").ToString() == "Chờ duyệt" ? "bg-warning text-dark" : (Eval("TrangThai").ToString() == "Đã duyệt" ? "bg-success" : "bg-danger") %>'>
+                                            <%# Eval("TrangThai") %>
+                                        </span>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:BoundField DataField="NgayTao" HeaderText="Ngày gửi" DataFormatString="{0:dd/MM/yyyy HH:mm}" />
+                            </Columns>
+                            <EmptyDataTemplate>
+                                <div class="p-4 text-center text-muted">Bạn chưa gửi đơn xin nghỉ phép nào.</div>
+                            </EmptyDataTemplate>
+                        </asp:GridView>
                     </div>
                 </div>
             </asp:View>

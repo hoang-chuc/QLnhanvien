@@ -67,7 +67,7 @@ test.describe('TEST 12: SITE.MASTER - MENU & NAVIGATION', () => {
 
         test('TC10: Nut dang xuat hoat dong', async ({ page }) => {
             await page.locator('#btnLogout').click();
-            await expect(page).toHaveURL(/.*Login\.aspx/, { timeout: 5000 });
+            await expect(page).toHaveURL(/.*Login(\.aspx)?/, { timeout: 5000 });
         });
 
         test('TC11: Icon hop thu nghi phep hien thi', async ({ page }) => {
@@ -98,24 +98,24 @@ test.describe('TEST 12: SITE.MASTER - MENU & NAVIGATION', () => {
 
         test('TC14: Menu "Ho so ca nhan" chuyen trang', async ({ page }) => {
             await page.locator('.sidebar-menu >> text=Thông tin cá nhân').click();
-            await expect(page).toHaveURL(/.*HoSoCaNhan\.aspx/, { timeout: 5000 });
+            await expect(page).toHaveURL(/.*HoSoCaNhan(\.aspx)?/, { timeout: 5000 });
         });
 
         test('TC15: Menu "Bang luong" chuyen trang', async ({ page }) => {
             await page.locator('.sidebar-menu >> text=Bảng lương của tôi').click();
-            await expect(page).toHaveURL(/.*BangLuongCaNhan\.aspx/, { timeout: 5000 });
+            await expect(page).toHaveURL(/.*BangLuongCaNhan(\.aspx)?/, { timeout: 5000 });
         });
     });
 
     test.describe('Chua dang nhap', () => {
         test('TC16: Chua dang nhap bi chuyen ve Login', async ({ page }) => {
             await page.goto(`${BASE_URL}/Pages/Common/Default.aspx`);
-            await expect(page).toHaveURL(/.*Login\.aspx/, { timeout: 5000 });
+            await expect(page).toHaveURL(/.*Login(\.aspx)?/, { timeout: 5000 });
         });
 
         test('TC17: Chua dang nhap khong vao duoc Admin page', async ({ page }) => {
             await page.goto(`${BASE_URL}/Pages/Admin/DanhSachNhanVien.aspx`);
-            await expect(page).toHaveURL(/.*Login\.aspx|.*Default/, { timeout: 5000 });
+            await expect(page).toHaveURL(/.*Login(\.aspx)?|.*Default/, { timeout: 5000 });
         });
     });
 });

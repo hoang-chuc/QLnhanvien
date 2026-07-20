@@ -22,6 +22,7 @@ namespace QLNhanVien
                 if (Session["Role"].ToString() == "NhanVien")
                 {
                     mvHopThu.ActiveViewIndex = 0;
+                    LoadLichSuNghiPhep();
                 }
                 else
                 {
@@ -59,6 +60,25 @@ namespace QLNhanVien
 
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Đã gửi đơn xin nghỉ thành công!');", true);
                 txtTuNgay.Text = txtDenNgay.Text = txtLyDo.Text = "";
+                LoadLichSuNghiPhep();
+            }
+        }
+
+        private void LoadLichSuNghiPhep()
+        {
+            using (SqlConnection conn = new SqlConnection(strConn))
+            {
+                string sql = @"SELECT NgayBatDau, NgayKetThuc, SoNgay, LyDo, TrangThai, NgayTao 
+                               FROM NghiPhep 
+                               WHERE MaNV = @MaNV 
+                               ORDER BY NgayTao DESC";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@MaNV", Session["MaNV"]);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                gvLichSuNghiPhep.DataSource = dt;
+                gvLichSuNghiPhep.DataBind();
             }
         }
 

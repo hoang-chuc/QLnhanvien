@@ -65,7 +65,7 @@
                     <% if (role == "NhanVien") { %>
                         <li><a href="<%= ResolveUrl("~/Pages/NhanVien/HoSoCaNhan.aspx") %>"><i class="fas fa-id-card"></i> <span>Thông tin cá nhân</span></a></li>
                         <li><a href="<%= ResolveUrl("~/Pages/NhanVien/BangLuongCaNhan.aspx") %>"><i class="fas fa-wallet"></i> <span>Bảng lương của tôi</span></a></li>
-                        <%-- Menu placeholder - chưa implement --%>
+                        <li><a href="<%= ResolveUrl("~/Pages/Common/HopThuNghiPhep.aspx") %>"><i class="fas fa-envelope-open-text"></i> <span>Đăng ký nghỉ phép</span></a></li>
                     <% } %>
 
                     <% if (role == "Admin") { %>

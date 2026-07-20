@@ -94,6 +94,9 @@
     <% } %>
 
     <% if (role == "NhanVien") { %>
+    <div class="col-12 mb-3">
+        <h4 class="fw-bold">Xin chào, <asp:Label ID="lblWelcomeName" runat="server" Text="" />!</h4>
+    </div>
     <div class="row mb-4">
         <!-- Card 1: Phong ban (Blue/bg-info) -->
         <div class="col-md-3 mb-3">
