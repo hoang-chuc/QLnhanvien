@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -17,11 +17,64 @@ namespace QLNhanVien
             if (Session["Role"] == null)
             {
                 Response.Redirect("/Pages/Auth/Login.aspx");
+                return;
             }
 
-            if (!IsPostBack)
+            if (Session["Role"].ToString() == "NhanVien")
             {
-                LoadThongKe();
+                LoadEmployeeDashboard();
+            }
+            else
+            {
+                if (!IsPostBack)
+                {
+                    LoadThongKe();
+                }
+            }
+        }
+
+        private void LoadEmployeeDashboard()
+        {
+            using (SqlConnection conn = new SqlConnection(strConn))
+            {
+                string sql = @"SELECT n.HoTen, p.TenPhongBan, c.TenChucVu, n.TrangThai 
+                               FROM NhanVien n 
+                               LEFT JOIN PhongBan p ON n.MaPB = p.MaPB 
+                               LEFT JOIN ChucVu c ON n.MaCV = c.MaCV 
+                               WHERE n.MaNV = @MaNV";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@MaNV", Session["MaNV"].ToString());
+                try
+                {
+                    conn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            lblWelcomeName.Text = dr["HoTen"].ToString();
+                            lblEmpPhongBan.Text = dr["TenPhongBan"] != DBNull.Value ? dr["TenPhongBan"].ToString() : "Chưa xếp phòng";
+                            lblEmpChucVu.Text = dr["TenChucVu"] != DBNull.Value ? dr["TenChucVu"].ToString() : "Nhân viên";
+                            lblEmpTrangThai.Text = dr["TrangThai"] != DBNull.Value ? dr["TrangThai"].ToString() : "Đang làm";
+                        }
+                    }
+
+                    // Query latest salary status
+                    SqlCommand cmdSalary = new SqlCommand("SELECT TOP 1 DaThanhToan FROM Luong WHERE MaNV = @MaNV ORDER BY Nam DESC, Thang DESC", conn);
+                    cmdSalary.Parameters.AddWithValue("@MaNV", Session["MaNV"].ToString());
+                    object result = cmdSalary.ExecuteScalar();
+                    if (result != null)
+                    {
+                        bool paid = Convert.ToBoolean(result);
+                        lblEmpLuongStatus.Text = paid ? "Đã trả" : "Đang xử lý";
+                    }
+                    else
+                    {
+                        lblEmpLuongStatus.Text = "Chưa có";
+                    }
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 

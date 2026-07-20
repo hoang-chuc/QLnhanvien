@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -12,9 +12,10 @@ namespace QLNhanVien
         protected void Page_Load(object sender, EventArgs e)
         {
             // Kiểm tra quyền: Chỉ Admin hoặc Quản lý mới được vào xem lịch sử
-            if (Session["Username"] == null || (Session["Role"].ToString() != "Admin" && Session["Role"].ToString() != "QuanLy"))
+            if (Session["Username"] == null || Session["Role"] == null || (Session["Role"].ToString() != "Admin" && Session["Role"].ToString() != "QuanLy"))
             {
                 Response.Redirect("/Pages/Common/Default.aspx");
+                return;
             }
 
             if (!IsPostBack)

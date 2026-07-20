@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -13,9 +13,10 @@ namespace QLNhanVien
         {
             // CHỐT CHẶN BẢO MẬT: Phân quyền URL
             // Chỉ Admin mới được phép ở lại trang này, nếu không phải đá về trang chủ
-            if (Session["Username"] == null || Session["Role"].ToString() != "Admin")
+            if (Session["Username"] == null || Session["Role"] == null || Session["Role"].ToString() != "Admin")
             {
                 Response.Redirect("/Pages/Common/Default.aspx");
+                return;
             }
 
             if (!IsPostBack)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -13,9 +13,10 @@ namespace QLNhanVien
         protected void Page_Load(object sender, EventArgs e)
         {
             // BẢO MẬT: Chỉ Admin và Quản lý mới được vào trang này
-            if (Session["Username"] == null || (Session["Role"].ToString() != "Admin" && Session["Role"].ToString() != "QuanLy"))
+            if (Session["Username"] == null || Session["Role"] == null || (Session["Role"].ToString() != "Admin" && Session["Role"].ToString() != "QuanLy"))
             {
                 Response.Redirect("/Pages/Common/Default.aspx");
+                return;
             }
 
             if (!IsPostBack)
@@ -207,6 +208,13 @@ namespace QLNhanVien
         // ================= XỬ LÝ NÚT LƯU TRÊN FORM =================
         protected void btnLuu_Click(object sender, EventArgs e)
         {
+            string errorMsg = "";
+            if (!ValidateForm(out errorMsg))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('{errorMsg.Replace("'", "\\'")}');", true);
+                return;
+            }
+
             using (SqlConnection conn = new SqlConnection(strConn))
             {
                 conn.Open();
@@ -311,6 +319,104 @@ namespace QLNhanVien
             cmd.Parameters.AddWithValue("@MaCV", cv);
             cmd.Parameters.AddWithValue("@Luong", luong);
             cmd.Parameters.AddWithValue("@TrangThai", ddlTrangThai.SelectedValue);
+        }
+
+        private bool ValidateForm(out string errorMsg)
+        {
+            errorMsg = "";
+            string hoTen = txtHoTen.Text.Trim();
+            string cccd = txtCCCD.Text.Trim();
+            string sdt = txtSDT.Text.Trim();
+            string email = txtEmail.Text.Trim();
+            string luongStr = txtLuong.Text.Trim();
+
+            if (string.IsNullOrEmpty(hoTen))
+            {
+                errorMsg = "Họ tên không được để trống.";
+                return false;
+            }
+
+            // Kiểm tra họ tên không chứa số/kí tự đặc biệt
+            if (!System.Text.RegularExpressions.Regex.IsMatch(hoTen, @"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÂÊÔƠƯưăâêôơư\s]+$"))
+            {
+                errorMsg = "Họ tên chỉ được chứa chữ cái và khoảng trắng.";
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(cccd) && !System.Text.RegularExpressions.Regex.IsMatch(cccd, @"^\d{9}(\d{3})?$"))
+            {
+                errorMsg = "Số CMND/CCCD phải gồm đúng 9 hoặc 12 chữ số.";
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(sdt) && !System.Text.RegularExpressions.Regex.IsMatch(sdt, @"^0\d{9}$"))
+            {
+                errorMsg = "Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số.";
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(email) && !System.Text.RegularExpressions.Regex.IsMatch(email, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"))
+            {
+                errorMsg = "Email không đúng định dạng.";
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(luongStr))
+            {
+                if (!decimal.TryParse(luongStr, out decimal luongVal) || luongVal < 0)
+                {
+                    errorMsg = "Lương cơ bản phải là số dương.";
+                    return false;
+                }
+            }
+
+            // Kiểm tra trùng lặp CCCD / SĐT / Email
+            using (SqlConnection conn = new SqlConnection(strConn))
+            {
+                conn.Open();
+                string maNV = hdfMaNV.Value;
+
+                if (!string.IsNullOrEmpty(cccd))
+                {
+                    string sql = "SELECT COUNT(*) FROM NhanVien WHERE CCCD = @CCCD" + (string.IsNullOrEmpty(maNV) ? "" : " AND MaNV <> @MaNV");
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@CCCD", cccd);
+                    if (!string.IsNullOrEmpty(maNV)) cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    if ((int)cmd.ExecuteScalar() > 0)
+                    {
+                        errorMsg = "Số CMND/CCCD này đã tồn tại trên hệ thống.";
+                        return false;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(sdt))
+                {
+                    string sql = "SELECT COUNT(*) FROM NhanVien WHERE SDT = @SDT" + (string.IsNullOrEmpty(maNV) ? "" : " AND MaNV <> @MaNV");
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@SDT", sdt);
+                    if (!string.IsNullOrEmpty(maNV)) cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    if ((int)cmd.ExecuteScalar() > 0)
+                    {
+                        errorMsg = "Số điện thoại này đã tồn tại trên hệ thống.";
+                        return false;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(email))
+                {
+                    string sql = "SELECT COUNT(*) FROM NhanVien WHERE Email = @Email" + (string.IsNullOrEmpty(maNV) ? "" : " AND MaNV <> @MaNV");
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    if (!string.IsNullOrEmpty(maNV)) cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    if ((int)cmd.ExecuteScalar() > 0)
+                    {
+                        errorMsg = "Email này đã tồn tại trên hệ thống.";
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -15,6 +15,7 @@ namespace QLNhanVien
             if (Session["Username"] == null || Session["MaNV"] == null)
             {
                 Response.Redirect("/Pages/Auth/Login.aspx");
+                return;
             }
 
             if (!IsPostBack)

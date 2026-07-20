@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -21,6 +21,7 @@ namespace QLNhanVien
             if (Session["Role"] == null || Session["Role"].ToString() != "Admin")
             {
                 Response.Redirect("/Pages/Common/Default.aspx");
+                return;
             }
 
             if (!IsPostBack)

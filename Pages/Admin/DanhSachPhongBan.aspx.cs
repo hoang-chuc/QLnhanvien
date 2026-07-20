@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -12,9 +12,10 @@ namespace QLNhanVien
         protected void Page_Load(object sender, EventArgs e)
         {
             // Chỉ cho phép Admin vào xem cấu hình phòng ban/chức vụ
-            if (Session["Username"] == null || Session["Role"].ToString() != "Admin")
+            if (Session["Username"] == null || Session["Role"] == null || Session["Role"].ToString() != "Admin")
             {
                 Response.Redirect("/Pages/Common/Default.aspx");
+                return;
             }
 
             if (!IsPostBack)
