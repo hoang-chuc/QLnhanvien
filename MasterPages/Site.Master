@@ -10,6 +10,38 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
     <link href="<%= ResolveUrl("~/Assets/CSS/style.css?v=1.0.5") %>" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global toast helper - dùng bởi ClientScript.RegisterStartupScript ở các trang
+        window.showToast = function (message, type) {
+            type = type || 'info';
+            var container = document.getElementById('toastContainer');
+            if (!container) return;
+            var bg = type === 'success' ? 'bg-success'
+                   : type === 'danger' ? 'bg-danger'
+                   : type === 'warning' ? 'bg-warning text-dark'
+                   : 'bg-info text-dark';
+            var icon = type === 'success' ? 'fa-check-circle'
+                     : type === 'danger' ? 'fa-exclamation-circle'
+                     : 'fa-info-circle';
+            var safeMsg = String(message).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            var toastId = 'toast_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+            var html = '<div id="' + toastId + '" class="toast align-items-center ' + bg + '" role="alert" aria-live="assertive" aria-atomic="true">'
+                     + '<div class="d-flex"><div class="toast-body"><i class="fas ' + icon + ' me-2"></i>' + safeMsg + '</div>'
+                     + '<button type="button" class="btn-close me-2 m-auto' + (type === 'warning' || type === 'info' ? ' btn-close-dark' : ' btn-close-white') + '" data-bs-dismiss="toast" aria-label="Close"></button></div></div>';
+            container.insertAdjacentHTML('beforeend', html);
+            var el = document.getElementById(toastId);
+            if (window.bootstrap && bootstrap.Toast) {
+                var t = new bootstrap.Toast(el, { delay: 3500 });
+                t.show();
+                el.addEventListener('hidden.bs.toast', function () { if (el.parentNode) el.parentNode.removeChild(el); });
+            } else {
+                el.classList.add('show');
+                el.style.display = 'block';
+                setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 4000);
+            }
+        };
+    </script>
 </head>
 <body>
     <form id="form1" runat="server">
