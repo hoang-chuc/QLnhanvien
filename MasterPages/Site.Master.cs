@@ -30,7 +30,7 @@ namespace QLNhanVien
                 Response.Cookies["ASP.NET_SessionId"].Expires = DateTime.Now.AddMonths(-20);
             }
 
-            Response.Redirect("~/Pages/Auth/Login.aspx");
+            Response.Redirect("/Pages/Auth/Login.aspx");
         }
     }
 }
